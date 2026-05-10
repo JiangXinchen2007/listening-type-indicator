@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>你是哪种倾听动物？| EI 情绪智能</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#FDF8F0;--bg2:#F0FFF4;--card:#FFFFFF;
+  --bd:rgba(0,0,0,.09);--bdh:rgba(0,0,0,.18);
+  --tx:#18110A;--dim:#4A3828;--mu:#9B8878;
+  --pri:#18A449;--pri-d:#0D5C2A;--pri-l:#DCFCE7;
+  --whale:#60A5FA;--whale-d:#1D4ED8;--whale-l:#EFF6FF;
+  --owl:#C084FC;--owl-d:#7C3AED;--owl-l:#F5F3FF;
+  --dolphin:#2DD4BF;--dolphin-d:#0F766E;--dolphin-l:#F0FDFA;
+  --tiger:#FB923C;--tiger-d:#C2410C;--tiger-l:#FFF7ED;
+  --bear:#F472B6;--bear-d:#BE185D;--bear-l:#FFF0F7;
+  --butterfly:#FBBF24;--butterfly-d:#B45309;--butterfly-l:#FFFBEB;
+}
+html,body{height:100%;font-family:'Inter',-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;-webkit-font-smoothing:antialiased;background:var(--bg);color:var(--tx);overflow:hidden}
+.page{position:fixed;inset:0;overflow-y:auto;overflow-x:hidden;opacity:0;pointer-events:none;transition:opacity .5s cubic-bezier(.16,1,.3,1),transform .5s cubic-bezier(.16,1,.3,1);transform:translateY(18px)}
+.page.active{opacity:1;pointer-events:all;transform:translateY(0)}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:rgba(0,0,0,.1);border-radius:2px}
+.w{width:100%;max-width:1200px;margin:0 auto;padding:0 28px}
+.wm{width:100%;max-width:760px;margin:0 auto;padding:0 20px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:16px;font-weight:800;border-radius:16px;cursor:pointer;padding:14px 36px;letter-spacing:-.01em;transition:transform .08s ease,box-shadow .08s ease,filter .08s;border:none;position:relative}
+.btn-p{background:var(--pri);color:#fff;box-shadow:0 5px 0 var(--pri-d)}
+.btn-p:hover{filter:brightness(1.09);transform:translateY(-2px);box-shadow:0 7px 0 var(--pri-d)}
+.btn-p:active{transform:translateY(4px)!important;box-shadow:0 1px 0 var(--pri-d)!important}
+.btn-o{background:var(--card);color:var(--dim);border:2.5px solid var(--bd);box-shadow:0 4px 0 rgba(0,0,0,.1)}
+.btn-o:hover{border-color:var(--bdh);color:var(--tx);transform:translateY(-2px);box-shadow:0 6px 0 rgba(0,0,0,.1)}
+.btn-o:active{transform:translateY(3px)!important;box-shadow:0 1px 0 rgba(0,0,0,.1)!important}
+.back-btn{display:inline-flex;align-items:center;gap:7px;background:var(--card);border:2.5px solid var(--bd);box-shadow:0 4px 0 rgba(0,0,0,.1);border-radius:12px;color:var(--dim);font-size:14px;font-weight:700;cursor:pointer;padding:9px 18px;transition:transform .08s ease,box-shadow .08s ease,border-color .15s;margin-bottom:32px;width:fit-content}
+.back-btn:hover{border-color:var(--bdh);color:var(--tx)}
+.back-btn:active{transform:translateY(3px)!important;box-shadow:0 1px 0 rgba(0,0,0,.1)!important}
+.ey-pill{display:inline-flex;align-items:center;gap:7px;padding:5px 14px;background:rgba(24,164,73,.1);border:1.5px solid rgba(24,164,73,.25);border-radius:999px;font-size:10.5px;font-weight:700;color:var(--pri);letter-spacing:.08em;text-transform:uppercase;margin-bottom:22px}
+.ey-dot{width:6px;height:6px;border-radius:50%;background:var(--pri);animation:blink 2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.sec-ey{font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--mu);margin-bottom:8px}
+.sec-h{font-size:clamp(28px,5.5vw,48px);font-weight:900;letter-spacing:-.03em;line-height:1.1;margin:0 0 14px;color:var(--tx)}
+.sec-p{font-size:14.5px;color:var(--dim);line-height:1.9;max-width:480px}
+
+/* HERO */
+#p-hero{background:var(--bg)}
+.hero-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:64px 0}
+.hero-inner{display:flex;flex-direction:column;align-items:center;gap:52px;width:100%;max-width:1200px;padding:0 28px}
+.hero-left{text-align:center;max-width:520px}
+.hero-h1{font-size:clamp(52px,12vw,108px);font-weight:900;line-height:.92;letter-spacing:-.055em;margin-bottom:22px;color:var(--tx)}
+.hero-h1 em{font-style:normal;color:var(--pri)}
+.hero-sub{font-size:17px;color:var(--dim);line-height:1.85;margin-bottom:32px;max-width:380px;margin-left:auto;margin-right:auto}
+.btn-row{display:flex;flex-direction:column;align-items:center;gap:10px}
+
+/* Hero splash overlay */
+#hero-splash{position:fixed;inset:0;z-index:20;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .85s cubic-bezier(.22,1,.36,1)}
+#hero-splash.exit{opacity:0;pointer-events:none}
+#hero-splash.gone{display:none}
+.splash-h1{font-size:clamp(28px,9.5vw,108px);font-weight:900;letter-spacing:-.055em;text-align:center;color:var(--tx);line-height:1.05;white-space:nowrap;transition:transform .9s cubic-bezier(.22,1,.36,1),opacity .75s ease}
+.splash-h1 em{color:var(--pri);font-style:normal}
+#hero-splash.exit .splash-h1{transform:scale(.8) translateY(-60px);opacity:0}
+.splash-hint{margin-top:52px;display:flex;flex-direction:column;align-items:center;gap:5px;color:var(--mu);font-size:12px;font-weight:600;letter-spacing:.06em;animation:fu 1s .9s both}
+.splash-hint-arrow{font-size:20px;animation:arr 1.6s ease-in-out infinite}
+@keyframes fu{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+/* ACARD flip */
+.anim-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:500px}
+.acard{border-radius:22px;position:relative;min-height:158px;perspective:800px;cursor:pointer}
+.acard-inner{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.34,1.1,.64,1)}
+.acard:hover .acard-inner{transform:translateY(-6px)}
+.acard.flipped .acard-inner{transform:rotateY(180deg)}
+.acard.flipped:hover .acard-inner{transform:rotateY(180deg) translateY(-6px)}
+.acard-front,.acard-back{position:absolute;inset:0;border-radius:20px;padding:18px 16px;border:2.5px solid;box-shadow:0 5px 0 rgba(0,0,0,.1);backface-visibility:hidden;display:flex;flex-direction:column;gap:4px}
+.acard-back{transform:rotateY(180deg);align-items:center;justify-content:center;text-align:center;color:#fff}
+.acard-front svg{display:block;margin-bottom:5px}
+.acard-n{font-size:13px;font-weight:800;color:var(--tx)}
+.acard-role{font-size:9px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--mu);margin-top:1px}
+.acard-desc{font-size:11px;color:var(--dim);line-height:1.5;margin-top:2px}
+.flip-tagline{font-size:12px;line-height:1.65;font-weight:600}
+.flip-level{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;opacity:.85;margin-top:8px;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.22)}
+@media(min-width:1024px){
+  .hero-inner{flex-direction:row;gap:80px;align-items:center;padding:0 60px}
+  .hero-left{text-align:left;flex:1;max-width:none}
+  .hero-left .hero-sub{margin-left:0}
+  .btn-row{align-items:flex-start}
+  .anim-grid{flex:0 0 490px;max-width:490px}
+}
+
+/* INTRO */
+#p-intro{background:var(--bg2)}
+.intro-outer{width:100%;max-width:1100px;margin:0 auto;padding:0 28px}
+.intro-grid{display:flex;flex-direction:column;gap:40px;padding:48px 0 80px}
+@media(min-width:960px){
+  .intro-grid{flex-direction:row;gap:64px;align-items:flex-start}
+  .intro-left{flex:1}
+  .intro-right{flex:0 0 360px;position:sticky;top:40px;padding-top:96px}
+}
+.lvs{display:flex;flex-direction:column;gap:5px;margin-top:20px}
+/* All 6 levels get card styling; .hi adds green highlight */
+.lv{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:14px;background:rgba(24,164,73,.13);border:1.5px solid rgba(24,164,73,.28)}
+.lv.hi{}
+.lv-n{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;background:rgba(0,0,0,.06);color:var(--mu);flex-shrink:0}
+.lv.hi .lv-n{background:var(--pri);color:#fff}
+.lv-i{flex:1}.lv-name{font-size:13px;font-weight:700;color:var(--dim)}.lv.hi .lv-name{color:var(--tx)}
+.lv-desc{font-size:11px;color:var(--mu);margin-top:1px}
+.lv-bar{width:60px;height:5px;background:rgba(0,0,0,.07);border-radius:3px;overflow:hidden}
+.lv-fill{height:100%;border-radius:3px;background:rgba(24,164,73,.3);width:0}
+.lv.hi .lv-fill{background:var(--pri)}
+/* Intro entrance animations */
+#p-intro.active .lv{animation:fu .4s var(--dl,.1s) both}
+#p-intro.active .lv-fill{width:var(--w);transition:width .9s ease-out calc(var(--dl,0s) + .3s)}
+#p-intro.active .tp{animation:fu .38s var(--dl,.12s) both}
+#p-intro.active .intro-left .sec-ey,#p-intro.active .intro-left .sec-h{animation:fu .45s .05s both}
+.ref{font-size:11px;color:var(--mu);font-style:italic;margin-top:10px}
+.intro-right .sec-ey{margin-bottom:14px}
+.t6{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}
+
+/* TP flip card */
+.tp{border-radius:18px;position:relative;min-height:142px;perspective:600px;cursor:pointer}
+.tp-inner{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.34,1.1,.64,1)}
+.tp:hover .tp-inner{transform:translateY(-4px)}
+.tp.flipped .tp-inner{transform:rotateY(180deg)}
+.tp.flipped:hover .tp-inner{transform:rotateY(180deg) translateY(-4px)}
+.tp-front,.tp-back{position:absolute;inset:0;border-radius:16px;padding:14px;border:2.5px solid;box-shadow:0 3px 0 rgba(0,0,0,.08);backface-visibility:hidden;display:flex;flex-direction:column;gap:2px}
+.tp-back{transform:rotateY(180deg);align-items:center;justify-content:center;text-align:center;color:#fff}
+.tp-front svg{display:block;margin-bottom:3px}
+.tp-n{font-size:12.5px;font-weight:800;color:var(--tx)}.tp-role{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--mu);margin-top:1px}
+.tp-desc{font-size:10.5px;color:var(--dim);line-height:1.45;margin-top:2px}
+.intro-cta{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:24px}
+.intro-cta .btn{width:100%;max-width:320px}
+
+/* QUIZ */
+#p-quiz{background:var(--bg);transition:background .8s ease}
+.quiz-body{padding:32px 0 80px;min-height:100vh;display:flex;flex-direction:column;gap:22px}
+.quiz-nav{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.qback{width:44px;height:44px;border-radius:50%;background:var(--card);border:2.5px solid var(--bd);cursor:pointer;font-size:18px;color:var(--dim);display:flex;align-items:center;justify-content:center;transition:all .18s cubic-bezier(.34,1.56,.64,1);flex-shrink:0;box-shadow:0 3px 0 rgba(0,0,0,.1)}
+.qback:hover{background:#f0f0f0;transform:translateY(-2px);box-shadow:0 5px 0 rgba(0,0,0,.1)}
+.qback:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.1)}
+.qdots{display:flex;gap:6px;align-items:center}
+.qdot{height:8px;border-radius:4px;background:var(--bd);transition:all .35s cubic-bezier(.34,1.56,.64,1);width:8px;flex-shrink:0}
+.qdot.done{width:22px;background:var(--pri)}.qdot.cur{width:22px;background:var(--tx)}
+.qcnt{font-size:12px;font-weight:700;color:var(--mu);letter-spacing:.05em;white-space:nowrap}
+.qbig{font-size:clamp(88px,20vw,168px);font-weight:900;line-height:1;letter-spacing:-.07em;color:rgba(0,0,0,.04);margin-bottom:-18px;user-select:none}
+.qcard{background:var(--card);border:2.5px solid var(--bd);border-radius:26px;padding:26px 22px;box-shadow:0 4px 0 rgba(0,0,0,.08)}
+.qtext{font-size:16px;line-height:1.8;color:var(--tx);font-weight:500}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{display:flex;align-items:flex-start;gap:14px;background:var(--card);border:2.5px solid var(--bd);border-radius:20px;padding:18px;cursor:pointer;transition:all .18s cubic-bezier(.34,1.56,.64,1);box-shadow:0 3px 0 rgba(0,0,0,.08)}
+.opt:hover{background:var(--pri-l);border-color:rgba(24,164,73,.3);transform:translateY(-3px);box-shadow:0 6px 0 rgba(0,0,0,.08)}
+.opt:active{transform:translateY(1px);box-shadow:0 2px 0 rgba(0,0,0,.08)}
+.opt-lbl{width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,.05);border:2px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--mu);flex-shrink:0;transition:all .18s}
+.opt-txt{font-size:14.5px;line-height:1.7;color:var(--dim);padding-top:5px;transition:color .18s}
+.opt.sel{border-color:var(--pri)!important;background:var(--pri-l)!important;transform:translateY(-3px)!important;box-shadow:0 6px 0 var(--pri-d)!important}
+.opt.sel .opt-lbl{background:var(--pri);border-color:var(--pri);color:#fff}
+.opt.sel .opt-txt{color:var(--tx)}
+@keyframes q-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes q-out{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-10px)}}
+.q-enter #qbig{animation:q-in .28s cubic-bezier(.22,1,.36,1) both}
+.q-enter .qcard{animation:q-in .32s .05s cubic-bezier(.22,1,.36,1) both}
+.q-enter .opts{animation:q-in .32s .12s cubic-bezier(.22,1,.36,1) both}
+.q-exit #qbig,.q-exit .qcard,.q-exit .opts{animation:q-out .17s ease-in both}
+
+/* LOADING */
+#p-loading{background:var(--bg)}
+.load-box{height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px}
+.load-em{font-size:72px;animation:wobble 1.6s ease-in-out infinite}
+@keyframes wobble{0%,100%{transform:scale(1) rotate(0deg)}20%{transform:scale(1.18) rotate(-12deg)}40%{transform:scale(.92) rotate(8deg)}60%{transform:scale(1.1) rotate(-6deg)}80%{transform:scale(.97) rotate(4deg)}}
+.load-msg{font-size:18px;font-weight:700;color:var(--tx);transition:opacity .22s;text-align:center;max-width:280px;line-height:1.55}
+.load-sub{font-size:13px;color:var(--mu);font-weight:500}
+.ldots{display:flex;gap:7px}
+.ldot{width:9px;height:9px;border-radius:50%;background:var(--pri);opacity:.22;animation:ldot 1.4s ease-in-out infinite}
+.ldot:nth-child(2){animation-delay:.18s}.ldot:nth-child(3){animation-delay:.36s}
+@keyframes ldot{0%,100%{opacity:.22;transform:scale(.75)}50%{opacity:1;transform:scale(1)}}
+
+/* RESULT */
+#p-result{background:var(--bg)}
+.cfti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:10}
+.cf{position:absolute;top:-20px;border-radius:3px;animation-fill-mode:forwards}
+@keyframes cf1{to{top:110%;opacity:0;transform:rotate(540deg)}}
+@keyframes cf2{to{top:110%;opacity:0;transform:rotate(-360deg) translateX(65px)}}
+@keyframes cf3{to{top:110%;opacity:0;transform:rotate(720deg) translateX(-75px)}}
+.r-hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:70px 24px;text-align:center;position:relative;color:#fff}
+.r-em-wrap{position:relative;margin-bottom:18px;display:inline-block}
+.r-em-glow{position:absolute;inset:-28px;border-radius:50%;background:rgba(255,255,255,.3);filter:blur(40px);opacity:.5;animation:glow-pulse 3s ease-in-out infinite}
+@keyframes glow-pulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:.65;transform:scale(1.1)}}
+.r-em-ani{display:inline-block;position:relative;z-index:1;animation:em-pop .65s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes em-pop{from{transform:scale(0) rotate(-25deg);opacity:0}to{transform:scale(1) rotate(0deg);opacity:1}}
+.r-char-tag{display:inline-flex;align-items:center;padding:5px 16px;border-radius:999px;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px;animation:fu .5s .2s both;background:rgba(255,255,255,.22);color:#fff;border:1.5px solid rgba(255,255,255,.4)}
+.r-name{font-size:clamp(44px,10vw,84px);font-weight:900;letter-spacing:-.045em;line-height:.96;margin-bottom:10px;animation:fu .5s .3s both;color:#fff}
+.r-en{font-size:13px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.75);margin-bottom:24px;animation:fu .5s .35s both}
+.r-traits{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:20px;animation:fu .5s .4s both}
+.trait{padding:5px 16px;border-radius:999px;font-size:12.5px;font-weight:700;border:1.5px solid;background:rgba(255,255,255,.22);color:#fff;border-color:rgba(255,255,255,.4)}
+.r-rarity{display:flex;align-items:center;gap:8px;margin-bottom:20px;animation:fu .5s .45s both}
+.rarity-label{font-size:12px;color:rgba(255,255,255,.8);font-weight:600}
+.rarity-stars{font-size:18px;letter-spacing:3px;color:rgba(255,255,255,.95)}
+.r-type-badge{display:inline-flex;align-items:center;padding:7px 18px;border-radius:999px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.32);font-size:13px;color:rgba(255,255,255,.95);font-weight:600;margin-bottom:22px;animation:fu .5s .5s both}
+.r-tagline{font-size:17px;color:rgba(255,255,255,.9);line-height:1.75;max-width:400px;margin-bottom:44px;animation:fu .5s .55s both}
+.scroll-hint{display:flex;flex-direction:column;align-items:center;gap:6px;color:rgba(255,255,255,.65);font-size:12px;font-weight:600;letter-spacing:.06em;animation:fu .5s .65s both}
+.scroll-arrow{font-size:22px;animation:arr 1.6s ease-in-out infinite}
+@keyframes arr{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
+.r-grad{display:none}
+.r-credit{text-align:center;padding:28px 24px 56px;color:rgba(255,255,255,.38);font-size:11px;line-height:2;letter-spacing:.04em}
+.credit-name{font-weight:700;font-size:12px;letter-spacing:.14em;margin-bottom:8px;color:rgba(255,255,255,.5)}
+.credit-row{display:flex;justify-content:center;align-items:baseline;gap:10px}
+.credit-lbl{opacity:.7;white-space:nowrap}
+.r-content{padding:52px 0 60px;background:var(--bg);border-radius:36px;width:calc(100% - 28px);max-width:860px;margin:-36px auto 60px;position:relative;z-index:1;box-shadow:0 24px 80px rgba(0,0,0,.2)}
+.r-stack{display:flex;flex-direction:column;gap:14px}
+.truth-card{border-radius:26px;padding:24px;background:var(--card);border:2.5px solid var(--bd);border-left-width:5px;box-shadow:0 4px 0 rgba(0,0,0,.08)}
+.truth-ic{font-size:28px;margin-bottom:10px;display:block}
+.truth-lbl{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-bottom:8px}
+.truth-txt{font-size:15px;color:var(--dim);line-height:1.85}
+.truth-q{font-size:14px;color:var(--mu);font-style:italic;margin-top:14px;padding-top:14px;border-top:1.5px solid var(--bd);line-height:1.75}
+.icard{background:var(--card);border:2.5px solid var(--bd);border-radius:24px;padding:22px;box-shadow:0 4px 0 rgba(0,0,0,.08)}
+.icard-hd{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.icard-ic{width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;background:rgba(0,0,0,.05);flex-shrink:0}
+.icard-title{font-size:14px;font-weight:800;color:var(--tx)}
+.icard-body{font-size:14px;color:var(--dim);line-height:1.9}
+.sbars{display:flex;flex-direction:column;gap:11px}
+.sbar-row{display:flex;align-items:center;gap:10px}
+.sbar-lbl{font-size:12px;font-weight:600;color:var(--dim);width:90px;flex-shrink:0}
+.sbar-track{flex:1;height:9px;background:rgba(0,0,0,.07);border-radius:5px;overflow:hidden}
+.sbar-fill{height:100%;border-radius:5px;transition:width .9s cubic-bezier(.34,1.2,.64,1)}
+.sbar-n{font-size:12px;font-weight:700;color:var(--mu);width:16px;text-align:right;flex-shrink:0}
+.tips{display:flex;flex-direction:column;gap:10px}
+.tip{display:flex;align-items:flex-start;gap:10px}
+.tip-ic{width:30px;height:30px;border-radius:9px;background:rgba(0,0,0,.05);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;margin-top:1px}
+.tip-tx{font-size:13.5px;color:var(--dim);line-height:1.8}
+.lvmini{display:flex;flex-direction:column;gap:3px}
+.lvm{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:10px}
+.lvm.hl{background:rgba(24,164,73,.07);border:1.5px solid rgba(24,164,73,.2)}
+.lvm-n{width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.05);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--mu);flex-shrink:0}
+.lvm.hl .lvm-n{background:var(--pri);color:#fff}
+.lvm-name{font-size:12px;font-weight:600;color:var(--mu)}.lvm.hl .lvm-name{color:var(--tx)}
+.cgrid{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:860px){.cgrid{grid-template-columns:1fr 1fr}.c-full{grid-column:1/-1}}
+.theory{border-radius:24px;padding:24px;background:rgba(24,164,73,.06);border:2px solid rgba(24,164,73,.15)}
+.theory-ic{font-size:26px;margin-bottom:10px;display:block}
+.theory-h{font-size:15px;font-weight:800;margin-bottom:8px;color:var(--tx)}
+.theory-b{font-size:13.5px;color:var(--dim);line-height:1.95}
+.r-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;padding:28px 0}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(18px);background:rgba(24,17,10,.92);border-radius:999px;padding:10px 22px;font-size:14px;font-weight:700;color:#fff;opacity:0;transition:all .3s;z-index:999;pointer-events:none;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.r-anim{opacity:0;transform:translateY(22px);transition:opacity .5s cubic-bezier(.16,1,.3,1),transform .5s cubic-bezier(.16,1,.3,1)}
+.r-anim.vis{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- SVG CHARACTERS (hidden symbol defs — flat geometric style) -->
+<svg style="display:none" aria-hidden="true"><defs>
+
+<!-- WHALE: 深海聆听鲸 — flat, big body, water spout, soft smile -->
+<g id="svg-whale">
+  <path d="M100,180 C84,198 56,194 58,176 C72,178 90,170 100,162" fill="#2563EB"/>
+  <path d="M100,180 C116,198 144,194 142,176 C128,178 110,170 100,162" fill="#2563EB"/>
+  <path d="M30,110 C12,96 10,126 26,134 C30,116 48,108 68,118 Z" fill="#2563EB"/>
+  <path d="M170,110 C188,96 190,126 174,134 C170,116 152,108 132,118 Z" fill="#2563EB"/>
+  <circle cx="100" cy="104" r="72" fill="#60A5FA"/>
+  <ellipse cx="100" cy="126" rx="48" ry="50" fill="#BFDBFE"/>
+  <ellipse cx="64" cy="112" rx="13" ry="8" fill="#93C5FD"/>
+  <ellipse cx="136" cy="112" rx="13" ry="8" fill="#93C5FD"/>
+  <circle cx="76" cy="88" r="20" fill="white"/>
+  <circle cx="124" cy="88" r="20" fill="white"/>
+  <circle cx="79" cy="90" r="13" fill="#1E3A8A"/>
+  <circle cx="127" cy="90" r="13" fill="#1E3A8A"/>
+  <circle cx="74" cy="84" r="5" fill="white"/>
+  <circle cx="122" cy="84" r="5" fill="white"/>
+  <path d="M84,118 Q100,132 116,118" stroke="#2563EB" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <ellipse cx="93" cy="26" rx="4" ry="11" fill="#93C5FD" transform="rotate(-10 93 26)"/>
+  <ellipse cx="100" cy="20" rx="4.5" ry="13" fill="#BFDBFE"/>
+  <ellipse cx="107" cy="26" rx="4" ry="11" fill="#93C5FD" transform="rotate(10 107 26)"/>
+</g>
+
+<!-- OWL: 月夜共情枭 — round, huge eyes, triangular ear tufts, star sparkle -->
+<g id="svg-owl">
+  <ellipse cx="100" cy="168" rx="48" ry="34" fill="#9333EA"/>
+  <path d="M52,150 C36,140 32,162 40,176 C48,162 62,156 74,162 Z" fill="#9333EA"/>
+  <path d="M148,150 C164,140 168,162 160,176 C152,162 138,156 126,162 Z" fill="#9333EA"/>
+  <ellipse cx="100" cy="168" rx="28" ry="22" fill="#EDE9FE"/>
+  <path d="M50,44 L38,10 L74,30 Z" fill="#7C3AED"/>
+  <path d="M150,44 L162,10 L126,30 Z" fill="#7C3AED"/>
+  <circle cx="100" cy="86" r="68" fill="#C084FC"/>
+  <circle cx="100" cy="88" r="50" fill="#EDE9FE"/>
+  <circle cx="78" cy="82" r="23" fill="white"/>
+  <circle cx="122" cy="82" r="23" fill="white"/>
+  <circle cx="81" cy="84" r="15" fill="#3B0764"/>
+  <circle cx="125" cy="84" r="15" fill="#3B0764"/>
+  <circle cx="76" cy="78" r="6" fill="white"/>
+  <circle cx="120" cy="78" r="6" fill="white"/>
+  <path d="M100,104 L92,118 L108,118 Z" fill="#FB923C"/>
+  <path d="M22,36 L24,28 L26,36 L34,38 L26,40 L24,48 L22,40 L14,38 Z" fill="#DDD6FE"/>
+  <circle cx="174" cy="46" r="4" fill="#EDE9FE"/>
+  <circle cx="180" cy="58" r="2.5" fill="#EDE9FE"/>
+</g>
+
+<!-- DOLPHIN: 彩虹活力豚 — diagonal leaping, big smile, water drops -->
+<g id="svg-dolphin">
+  <path d="M22,154 C6,140 2,160 12,172 C22,158 38,150 54,158" fill="#0F766E"/>
+  <path d="M22,154 C14,170 4,182 14,192 C24,176 40,164 54,158" fill="#0F766E"/>
+  <ellipse cx="102" cy="100" rx="90" ry="28" fill="#2DD4BF" transform="rotate(-22 102 100)"/>
+  <ellipse cx="102" cy="104" rx="70" ry="17" fill="#99F6E4" transform="rotate(-22 102 104)"/>
+  <path d="M118,52 C128,30 146,22 150,36 C138,40 126,54 122,70 Z" fill="#0F766E"/>
+  <path d="M162,46 C174,34 188,32 190,44 C178,44 168,54 162,64 Z" fill="#2DD4BF"/>
+  <circle cx="152" cy="58" r="14" fill="white"/>
+  <circle cx="155" cy="60" r="9" fill="#052E2A"/>
+  <circle cx="151" cy="56" r="4" fill="white"/>
+  <path d="M160,72 Q148,86 134,78" stroke="#0F766E" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+  <ellipse cx="10" cy="112" rx="3" ry="9" fill="#99F6E4" transform="rotate(-22 10 112)"/>
+  <ellipse cx="6" cy="132" rx="2.5" ry="7" fill="#99F6E4" transform="rotate(-22 6 132)"/>
+  <circle cx="174" cy="28" r="6" fill="#A7F3D0"/>
+  <circle cx="186" cy="18" r="4.5" fill="#A7F3D0"/>
+  <circle cx="166" cy="16" r="3.5" fill="#A7F3D0"/>
+</g>
+
+<!-- TIGER: 闪电行动虎 — round face, bold stripes, lightning badge -->
+<g id="svg-tiger">
+  <circle cx="48" cy="50" r="30" fill="#FB923C"/>
+  <circle cx="48" cy="50" r="17" fill="#FED7AA"/>
+  <circle cx="152" cy="50" r="30" fill="#FB923C"/>
+  <circle cx="152" cy="50" r="17" fill="#FED7AA"/>
+  <ellipse cx="100" cy="188" rx="42" ry="16" fill="#FB923C"/>
+  <circle cx="100" cy="96" r="72" fill="#FB923C"/>
+  <path d="M80,36 C76,52 78,68 82,76" stroke="#C2410C" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <path d="M100,32 C100,50 100,66 100,76" stroke="#C2410C" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <path d="M120,36 C124,52 122,68 118,76" stroke="#C2410C" stroke-width="7" stroke-linecap="round" fill="none"/>
+  <ellipse cx="100" cy="122" rx="38" ry="30" fill="#FED7AA"/>
+  <ellipse cx="44" cy="118" rx="22" ry="18" fill="#FED7AA"/>
+  <ellipse cx="156" cy="118" rx="22" ry="18" fill="#FED7AA"/>
+  <circle cx="74" cy="86" r="19" fill="white"/>
+  <circle cx="126" cy="86" r="19" fill="white"/>
+  <circle cx="77" cy="88" r="12" fill="#1A0400"/>
+  <circle cx="129" cy="88" r="12" fill="#1A0400"/>
+  <circle cx="72" cy="82" r="5" fill="white"/>
+  <circle cx="124" cy="82" r="5" fill="white"/>
+  <ellipse cx="100" cy="114" rx="9" ry="7" fill="#C2410C"/>
+  <path d="M87,126 Q100,138 113,126" stroke="#C2410C" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <line x1="44" y1="116" x2="66" y2="120" stroke="#C2410C" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+  <line x1="42" y1="126" x2="64" y2="126" stroke="#C2410C" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+  <line x1="134" y1="120" x2="156" y2="116" stroke="#C2410C" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+  <line x1="136" y1="126" x2="158" y2="126" stroke="#C2410C" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+  <circle cx="170" cy="32" r="20" fill="#FBBF24"/>
+  <path d="M174,20 L166,32 L172,32 L164,46 L178,30 L172,30 Z" fill="#C2410C"/>
+</g>
+
+<!-- BEAR: 暖阳陪伴熊 — round, welcoming arms, heart nose, floating heart -->
+<g id="svg-bear">
+  <circle cx="48" cy="46" r="28" fill="#F472B6"/>
+  <circle cx="48" cy="46" r="16" fill="#FBCFE8"/>
+  <circle cx="152" cy="46" r="28" fill="#F472B6"/>
+  <circle cx="152" cy="46" r="16" fill="#FBCFE8"/>
+  <path d="M30,128 C12,116 6,148 22,160 C32,144 50,138 70,148 Z" fill="#F472B6"/>
+  <path d="M170,128 C188,116 194,148 178,160 C168,144 150,138 130,148 Z" fill="#F472B6"/>
+  <circle cx="100" cy="100" r="70" fill="#F472B6"/>
+  <ellipse cx="100" cy="122" rx="40" ry="34" fill="#FBCFE8"/>
+  <ellipse cx="62" cy="108" rx="14" ry="9" fill="#FCA5A5" opacity="0.75"/>
+  <ellipse cx="138" cy="108" rx="14" ry="9" fill="#FCA5A5" opacity="0.75"/>
+  <circle cx="76" cy="84" r="19" fill="white"/>
+  <circle cx="124" cy="84" r="19" fill="white"/>
+  <circle cx="79" cy="86" r="12" fill="#1A001A"/>
+  <circle cx="127" cy="86" r="12" fill="#1A001A"/>
+  <circle cx="74" cy="81" r="5" fill="white"/>
+  <circle cx="122" cy="81" r="5" fill="white"/>
+  <path d="M100,112 C98,108 92,106 92,112 C92,118 100,124 100,124 C100,124 108,118 108,112 C108,106 102,108 100,112 Z" fill="#BE185D"/>
+  <path d="M87,128 Q100,138 113,128" stroke="#BE185D" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+  <path d="M170,22 C168,18 162,18 162,24 C162,30 170,36 170,36 C170,36 178,30 178,24 C178,18 172,18 170,22 Z" fill="#FB7185"/>
+</g>
+
+<!-- BUTTERFLY: 探索好奇蝶 — flat wings, question marks, antennae safely inside viewBox -->
+<g id="svg-butterfly">
+  <ellipse cx="56" cy="84" rx="50" ry="44" fill="#FBBF24" transform="rotate(-15 56 84)"/>
+  <ellipse cx="144" cy="84" rx="50" ry="44" fill="#FBBF24" transform="rotate(15 144 84)"/>
+  <ellipse cx="62" cy="154" rx="36" ry="26" fill="#FDE68A" transform="rotate(22 62 154)"/>
+  <ellipse cx="138" cy="154" rx="36" ry="26" fill="#FDE68A" transform="rotate(-22 138 154)"/>
+  <ellipse cx="52" cy="76" rx="22" ry="20" fill="#FDE68A" opacity="0.6" transform="rotate(-15 52 76)"/>
+  <ellipse cx="148" cy="76" rx="22" ry="20" fill="#FDE68A" opacity="0.6" transform="rotate(15 148 76)"/>
+  <ellipse cx="100" cy="126" rx="9" ry="54" fill="#92400E"/>
+  <circle cx="100" cy="64" r="18" fill="#92400E"/>
+  <circle cx="94" cy="62" r="5" fill="white"/>
+  <circle cx="106" cy="62" r="5" fill="white"/>
+  <circle cx="95" cy="63" r="3" fill="#1A0A00"/>
+  <circle cx="107" cy="63" r="3" fill="#1A0A00"/>
+  <ellipse cx="86" cy="44" rx="3" ry="14" fill="#78350F" transform="rotate(-28 86 44)"/>
+  <circle cx="74" cy="26" r="9" fill="#FBBF24"/>
+  <ellipse cx="114" cy="44" rx="3" ry="14" fill="#78350F" transform="rotate(28 114 44)"/>
+  <circle cx="126" cy="26" r="9" fill="#FBBF24"/>
+  <path d="M50,74 C50,64 58,60 58,70 C58,76 54,78 54,84" stroke="#B45309" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.65"/>
+  <circle cx="54" cy="90" r="3.5" fill="#B45309" opacity="0.65"/>
+  <path d="M142,74 C142,64 150,60 150,70 C150,76 146,78 146,84" stroke="#B45309" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.65"/>
+  <circle cx="146" cy="90" r="3.5" fill="#B45309" opacity="0.65"/>
+</g>
+
+</defs></svg>
+
+<div class="cfti" id="cfti"></div>
+
+<!-- PAGE 1: HERO -->
+<section id="p-hero" class="page active">
+  <div id="hero-splash" aria-hidden="true">
+    <div class="splash-h1">你是哪种<em>倾听</em>动物？</div>
+    <div class="splash-hint">
+      <span class="splash-hint-arrow">↓</span>
+      <span>向下滑动</span>
+    </div>
+  </div>
+  <div class="hero-wrap">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <div class="ey-pill"><span class="ey-dot"></span>EI 情绪智能 · 同理心倾听测试</div>
+        <h1 class="hero-h1">你是<br>哪种<br><em>倾听</em><br>动物？</h1>
+        <p class="hero-sub">8道情境题，发现你的专属倾听动物——<br>也许比你自己更了解你</p>
+        <div class="btn-row">
+          <button class="btn btn-p" onclick="goIntro()">🐾 发现我的倾听动物</button>
+        </div>
+      </div>
+      <div class="anim-grid">
+
+        <div class="acard" onclick="this.classList.toggle('flipped')">
+          <div class="acard-inner">
+            <div class="acard-front" style="background:var(--whale-l);border-color:var(--whale)">
+              <svg width="56" height="56" viewBox="0 0 200 200"><use href="#svg-whale"/></svg>
+              <div class="acard-n">深海聆听鲸</div>
+              <div class="acard-role">THE DEEP LISTENER</div>
+              <div class="acard-desc">从不评判，所有人都愿意告诉你秘密</div>
+            </div>
+            <div class="acard-back" style="background:var(--whale-d);border-color:var(--whale-d)">
+              <div class="flip-tagline">朋友什么都愿意告诉你，因为你从不评判</div>
+              <div class="flip-level">第4级 · 专注倾听</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="acard" onclick="this.classList.toggle('flipped')">
+          <div class="acard-inner">
+            <div class="acard-front" style="background:var(--owl-l);border-color:var(--owl)">
+              <svg width="56" height="56" viewBox="0 0 200 200"><use href="#svg-owl"/></svg>
+              <div class="acard-n">月夜共情枭</div>
+              <div class="acard-role">THE EMPATHY SAGE</div>
+              <div class="acard-desc">总能说出对方心里那句没说出口的话</div>
+            </div>
+            <div class="acard-back" style="background:var(--owl-d);border-color:var(--owl-d)">
+              <div class="flip-tagline">你总能说出对方心里那句没说出口的话</div>
+              <div class="flip-level">第5–6级 · 同理心倾听</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="acard" onclick="this.classList.toggle('flipped')">
+          <div class="acard-inner">
+            <div class="acard-front" style="background:var(--dolphin-l);border-color:var(--dolphin)">
+              <svg width="56" height="56" viewBox="0 0 200 200"><use href="#svg-dolphin"/></svg>
+              <div class="acard-n">彩虹活力豚</div>
+              <div class="acard-role">THE VIBE AMPLIFIER</div>
+              <div class="acard-desc">对话在你手里永远充满活力和能量</div>
+            </div>
+            <div class="acard-back" style="background:var(--dolphin-d);border-color:var(--dolphin-d)">
+              <div class="flip-tagline">话题到你这里，总能弹射出新的方向</div>
+              <div class="flip-level">第3级 · 选择性倾听</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="acard" onclick="this.classList.toggle('flipped')">
+          <div class="acard-inner">
+            <div class="acard-front" style="background:var(--tiger-l);border-color:var(--tiger)">
+              <svg width="56" height="56" viewBox="0 0 200 200"><use href="#svg-tiger"/></svg>
+              <div class="acard-n">闪电行动虎</div>
+              <div class="acard-role">THE FIXER</div>
+              <div class="acard-desc">遇到麻烦？你已经在列解决方案了</div>
+            </div>
+            <div class="acard-back" style="background:var(--tiger-d);border-color:var(--tiger-d)">
+              <div class="flip-tagline">遇到麻烦？你已经在列解决方案了</div>
+              <div class="flip-level">第2–3级 · 解决导向</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="acard" onclick="this.classList.toggle('flipped')">
+          <div class="acard-inner">
+            <div class="acard-front" style="background:var(--bear-l);border-color:var(--bear)">
+              <svg width="56" height="56" viewBox="0 0 200 200"><use href="#svg-bear"/></svg>
+              <div class="acard-n">暖阳陪伴熊</div>
+              <div class="acard-role">THE WARM COMPANION</div>
+              <div class="acard-desc">安静守候，你的存在本身就是礼物</div>
+            </div>
+            <div class="acard-back" style="background:var(--bear-d);border-color:var(--bear-d)">
+              <div class="flip-tagline">安静守候，你的存在本身就是礼物</div>
+              <div class="flip-level">第4–5级 · 专注倾听</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="acard" onclick="this.classList.toggle('flipped')">
+          <div class="acard-inner">
+            <div class="acard-front" style="background:var(--butterfly-l);border-color:var(--butterfly)">
+              <svg width="56" height="56" viewBox="0 0 200 200"><use href="#svg-butterfly"/></svg>
+              <div class="acard-n">探索好奇蝶</div>
+              <div class="acard-role">THE CURIOUS QUESTIONER</div>
+              <div class="acard-desc">问出好问题，帮对方看见自己</div>
+            </div>
+            <div class="acard-back" style="background:var(--butterfly-d);border-color:var(--butterfly-d)">
+              <div class="flip-tagline">你问出了对方从没问过自己的问题</div>
+              <div class="flip-level">第5–6级 · 探问倾听</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAGE 2: INTRO -->
+<section id="p-intro" class="page">
+  <div class="intro-outer">
+    <div class="intro-grid">
+      <div class="intro-left">
+        <button class="back-btn" onclick="showPage('p-hero')">← 返回</button>
+        <div class="sec-ey">科学背景</div>
+        <h2 class="sec-h">倾听，<br>也有六个段位</h2>
+        <p class="sec-p">心理学家 Zenger &amp; Folkman（2016）将倾听能力划分为六个层次。大多数人一生停留在2–3级，而你将在接下来3分钟里找到自己的位置。</p>
+        <div class="lvs">
+          <div class="lv hi" style="--dl:.06s"><div class="lv-n">6</div><div class="lv-i"><div class="lv-name">深度同理心倾听</div><div class="lv-desc">完全进入对方情感世界</div></div><div class="lv-bar"><div class="lv-fill" style="--w:100%;--dl:.06s"></div></div></div>
+          <div class="lv hi" style="--dl:.14s"><div class="lv-n">5</div><div class="lv-i"><div class="lv-name">同理心倾听</div><div class="lv-desc">感受并反映对方情绪</div></div><div class="lv-bar"><div class="lv-fill" style="--w:83%;--dl:.14s"></div></div></div>
+          <div class="lv hi" style="--dl:.22s"><div class="lv-n">4</div><div class="lv-i"><div class="lv-name">专注倾听</div><div class="lv-desc">全身心关注，积极吸收</div></div><div class="lv-bar"><div class="lv-fill" style="--w:67%;--dl:.22s"></div></div></div>
+          <div class="lv" style="--dl:.30s"><div class="lv-n">3</div><div class="lv-i"><div class="lv-name">选择性倾听</div><div class="lv-desc">选择性接收，部分回应</div></div><div class="lv-bar"><div class="lv-fill" style="--w:50%;--dl:.30s"></div></div></div>
+          <div class="lv" style="--dl:.38s"><div class="lv-n">2</div><div class="lv-i"><div class="lv-name">假装在听</div><div class="lv-desc">身体在场，思维已游离</div></div><div class="lv-bar"><div class="lv-fill" style="--w:33%;--dl:.38s"></div></div></div>
+          <div class="lv" style="--dl:.46s"><div class="lv-n">1</div><div class="lv-i"><div class="lv-name">忽视</div><div class="lv-desc">完全不关注对方</div></div><div class="lv-bar"><div class="lv-fill" style="--w:17%;--dl:.46s"></div></div></div>
+        </div>
+        <p class="ref">来源：Zenger, J. &amp; Folkman, J. (2016). Harvard Business Review.</p>
+      </div>
+      <div class="intro-right">
+        <div class="sec-ey">你会是哪只动物？</div>
+        <div class="t6">
+
+          <div class="tp" style="--dl:.10s" onclick="this.classList.toggle('flipped')">
+            <div class="tp-inner">
+              <div class="tp-front" style="background:var(--whale-l);border-color:var(--whale)">
+                <svg width="38" height="38" viewBox="0 0 200 200"><use href="#svg-whale"/></svg>
+                <div class="tp-n">深海聆听鲸</div><div class="tp-role">海绵型</div>
+                <div class="tp-desc">默默吸纳情绪，朋友什么都愿意告诉你</div>
+              </div>
+              <div class="tp-back" style="background:var(--whale-d);border-color:var(--whale-d)">
+                <div class="flip-tagline" style="font-size:11px">朋友什么都愿意告诉你，因为你从不评判</div>
+                <div class="flip-level">第4级 · 专注倾听</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tp" style="--dl:.16s" onclick="this.classList.toggle('flipped')">
+            <div class="tp-inner">
+              <div class="tp-front" style="background:var(--owl-l);border-color:var(--owl)">
+                <svg width="38" height="38" viewBox="0 0 200 200"><use href="#svg-owl"/></svg>
+                <div class="tp-n">月夜共情枭</div><div class="tp-role">镜子型</div>
+                <div class="tp-desc">总能说出对方心里没说出口的话</div>
+              </div>
+              <div class="tp-back" style="background:var(--owl-d);border-color:var(--owl-d)">
+                <div class="flip-tagline" style="font-size:11px">你总能说出对方心里那句没说出口的话</div>
+                <div class="flip-level">第5–6级 · 同理心倾听</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tp" style="--dl:.22s" onclick="this.classList.toggle('flipped')">
+            <div class="tp-inner">
+              <div class="tp-front" style="background:var(--dolphin-l);border-color:var(--dolphin)">
+                <svg width="38" height="38" viewBox="0 0 200 200"><use href="#svg-dolphin"/></svg>
+                <div class="tp-n">彩虹活力豚</div><div class="tp-role">蹦床型</div>
+                <div class="tp-desc">活跃互动，任何对话都能弹出新方向</div>
+              </div>
+              <div class="tp-back" style="background:var(--dolphin-d);border-color:var(--dolphin-d)">
+                <div class="flip-tagline" style="font-size:11px">话题到你这里，总能弹射出新的方向</div>
+                <div class="flip-level">第3级 · 选择性倾听</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tp" style="--dl:.28s" onclick="this.classList.toggle('flipped')">
+            <div class="tp-inner">
+              <div class="tp-front" style="background:var(--tiger-l);border-color:var(--tiger)">
+                <svg width="38" height="38" viewBox="0 0 200 200"><use href="#svg-tiger"/></svg>
+                <div class="tp-n">闪电行动虎</div><div class="tp-role">解决者型</div>
+                <div class="tp-desc">行动派，朋友遇事第一个想到的人</div>
+              </div>
+              <div class="tp-back" style="background:var(--tiger-d);border-color:var(--tiger-d)">
+                <div class="flip-tagline" style="font-size:11px">遇到麻烦？你已经在列解决方案了</div>
+                <div class="flip-level">第2–3级 · 解决导向</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tp" style="--dl:.34s" onclick="this.classList.toggle('flipped')">
+            <div class="tp-inner">
+              <div class="tp-front" style="background:var(--bear-l);border-color:var(--bear)">
+                <svg width="38" height="38" viewBox="0 0 200 200"><use href="#svg-bear"/></svg>
+                <div class="tp-n">暖阳陪伴熊</div><div class="tp-role">陪伴型</div>
+                <div class="tp-desc">安静守候，存在本身就是礼物</div>
+              </div>
+              <div class="tp-back" style="background:var(--bear-d);border-color:var(--bear-d)">
+                <div class="flip-tagline" style="font-size:11px">安静守候，你的存在本身就是礼物</div>
+                <div class="flip-level">第4–5级 · 专注倾听</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tp" style="--dl:.40s" onclick="this.classList.toggle('flipped')">
+            <div class="tp-inner">
+              <div class="tp-front" style="background:var(--butterfly-l);border-color:var(--butterfly)">
+                <svg width="38" height="38" viewBox="0 0 200 200"><use href="#svg-butterfly"/></svg>
+                <div class="tp-n">探索好奇蝶</div><div class="tp-role">探问型</div>
+                <div class="tp-desc">问出好问题，帮对方看见自己</div>
+              </div>
+              <div class="tp-back" style="background:var(--butterfly-d);border-color:var(--butterfly-d)">
+                <div class="flip-tagline" style="font-size:11px">你问出了对方从没问过自己的问题</div>
+                <div class="flip-level">第5–6级 · 探问倾听</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="intro-cta">
+          <button class="btn btn-p" onclick="startQuiz()" style="width:100%">开始测试 →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAGE 3: QUIZ -->
+<section id="p-quiz" class="page">
+  <div class="wm" style="max-width:560px">
+    <div class="quiz-body">
+      <div class="quiz-nav">
+        <button class="qback" onclick="quizBack()">←</button>
+        <div class="qdots" id="qdots"></div>
+        <span class="qcnt" id="qcnt">1 / 8</span>
+      </div>
+      <div class="qbig" id="qbig">01</div>
+      <div class="qcard"><p class="qtext" id="qtext"></p></div>
+      <div class="opts" id="opts"></div>
+    </div>
+  </div>
+</section>
+
+<!-- PAGE 4: LOADING -->
+<section id="p-loading" class="page">
+  <div class="load-box">
+    <div class="load-em" id="load-em">🔍</div>
+    <p class="load-msg" id="load-msg">正在召唤倾听鉴定委员会…</p>
+    <p class="load-sub">综合 8 道题目的作答模式</p>
+    <div class="ldots"><div class="ldot"></div><div class="ldot"></div><div class="ldot"></div></div>
+  </div>
+</section>
+
+<!-- PAGE 5: RESULT -->
+<section id="p-result" class="page">
+  <div class="r-hero" id="r-hero">
+    <div class="r-em-wrap">
+      <div class="r-em-glow" id="r-em-glow"></div>
+      <div class="r-em-ani" id="r-em-ani"></div>
+    </div>
+    <div class="r-char-tag" id="r-char-tag">SPONGE TYPE</div>
+    <h2 class="r-name" id="r-name">深海聆听鲸</h2>
+    <p class="r-en" id="r-en">THE DEEP LISTENER</p>
+    <div class="r-traits" id="r-traits"></div>
+    <div class="r-rarity">
+      <span class="rarity-label" id="r-rarity-label">极其稀有</span>
+      <span class="rarity-stars" id="r-stars">★★★★★</span>
+    </div>
+    <div class="r-type-badge" id="r-type-badge">科学倾听类型 · 海绵型</div>
+    <p class="r-tagline" id="r-tagline">朋友什么都愿意告诉你，因为你从不评判</p>
+    <div class="scroll-hint"><span class="scroll-arrow">↓</span><span>查看详细解读</span></div>
+  </div>
+  <div class="r-grad" id="r-grad"></div>
+  <div class="r-content">
+
+    <div class="wm" style="max-width:800px">
+      <div class="r-stack">
+        <div class="truth-card r-anim" id="truth-card">
+          <span class="truth-ic">💡</span>
+          <div class="truth-lbl">你可能没意识到</div>
+          <div class="truth-txt" id="truth-txt"></div>
+          <div class="truth-q" id="truth-q"></div>
+        </div>
+        <div class="icard r-anim">
+          <div class="icard-hd"><div class="icard-ic">📊</div><div class="icard-title">你的倾听风格分布</div></div>
+          <div class="sbars" id="sbars"></div>
+        </div>
+        <div class="cgrid">
+          <div class="icard r-anim">
+            <div class="icard-hd"><div class="icard-ic">✨</div><div class="icard-title">你的超能力</div></div>
+            <div class="icard-body" id="r-str"></div>
+          </div>
+          <div class="icard r-anim">
+            <div class="icard-hd"><div class="icard-ic">🌀</div><div class="icard-title">你的盲点</div></div>
+            <div class="icard-body" id="r-bld"></div>
+          </div>
+          <div class="icard r-anim">
+            <div class="icard-hd"><div class="icard-ic">🌱</div><div class="icard-title">成长行动方案</div></div>
+            <div class="tips" id="tips"></div>
+          </div>
+          <div class="icard r-anim">
+            <div class="icard-hd"><div class="icard-ic">📈</div><div class="icard-title">六级倾听定位</div></div>
+            <div class="lvmini" id="lvmini"></div>
+            <p style="font-size:12px;color:var(--mu);line-height:1.75;margin-top:12px" id="lv-note"></p>
+          </div>
+          <div class="theory c-full r-anim">
+            <span class="theory-ic">📖</span>
+            <div class="theory-h" id="th-h"></div>
+            <div class="theory-b" id="th-b"></div>
+          </div>
+        </div>
+        <div class="r-actions r-anim">
+          <button class="btn btn-p" onclick="saveImg()">🖼️ 保存结果图片</button>
+          <button class="btn btn-o" onclick="retake()">↩ 重新测试</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="r-credit">
+    <div class="credit-name">七匹狠小组制作</div>
+    <div class="credit-row"><span class="credit-lbl">组长</span><span>姜昕辰</span></div>
+    <div class="credit-row"><span class="credit-lbl">组员</span><span>黎宇刚　廖子贤　梁家僖　林烜正　吴天钰　俞锦诚</span></div>
+  </div>
+</section>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const QS=[
+  {text:"室友半夜坐在床边发呆，你问她怎么了，她说「没事，就是有点累」。你会：",opts:[
+    {l:"A",t:"点点头说「那你早点休息吧」，不再追问",tp:"海绵"},
+    {l:"B",t:"坐到她旁边说「我感觉你不太对劲，愿意说说吗？」",tp:"镜子"},
+    {l:"C",t:"立刻建议「要不要去跑个步？运动有助于放松」",tp:"解决者"}]},
+  {text:"朋友告诉你他考试挂科了，沉默了很久。你第一反应是：",opts:[
+    {l:"A",t:"默默走过去，坐在他旁边，什么也不说",tp:"陪伴"},
+    {l:"B",t:"「没事的，下次努力就好！对了你上次不是说要换专业吗？」",tp:"蹦床"},
+    {l:"C",t:"「这次对你来说意味着什么？」",tp:"探问"}]},
+  {text:"你的朋友失恋了，情绪很低落。你会：",opts:[
+    {l:"A",t:"默默陪在旁边，等她开口说",tp:"海绵"},
+    {l:"B",t:"帮她倒杯热水，坐下来陪着，不催她说话",tp:"陪伴"},
+    {l:"C",t:"「TA不值得你！你这么好，很快就会找到更好的！」",tp:"蹦床"}]},
+  {text:"朋友情绪激动地说「父母根本不理解我」。你第一反应是：",opts:[
+    {l:"A",t:"「那你现在需要我帮你想想怎么跟他们沟通吗？」",tp:"解决者"},
+    {l:"B",t:"「听起来你觉得很委屈，发生什么了？」",tp:"镜子"},
+    {l:"C",t:"「你觉得他们最难理解你的是哪一块？」",tp:"探问"}]},
+  {text:"朋友说感觉在学校没有真正的朋友，你会：",opts:[
+    {l:"A",t:"认真听完，点头表示理解，不评判也不建议",tp:"海绵"},
+    {l:"B",t:"「我在这里。不管怎样，我都是你的朋友。」",tp:"陪伴"},
+    {l:"C",t:"「要不要试试多参加一些社团活动？」",tp:"解决者"}]},
+  {text:"朋友和室友闹矛盾，来找你倾诉。你会：",opts:[
+    {l:"A",t:"「这种事我也遇到过！我上次是这样处理的……」",tp:"蹦床"},
+    {l:"B",t:"「听起来你觉得不被尊重，是这样吗？」",tp:"镜子"},
+    {l:"C",t:"「如果让你说，这次矛盾最核心的问题是什么？」",tp:"探问"}]},
+  {text:"朋友分享了开心的事，但你注意到她眼神里有点疲惫。你会：",opts:[
+    {l:"A",t:"专注回应她说的开心的事，不提疲惫",tp:"海绵"},
+    {l:"B",t:"先回应开心的事，然后轻轻问「你今天整体感觉怎么样？」",tp:"镜子"},
+    {l:"C",t:"「哇太棒了！对了你知道吗我昨天也遇到一件……」",tp:"蹦床"}]},
+  {text:"朋友说对未来感到很迷茫，不知道自己想要什么。你会：",opts:[
+    {l:"A",t:"「要不要试试做一个职业测评？我来帮你分析」",tp:"解决者"},
+    {l:"B",t:"「迷茫也没关系，我陪着你一起慢慢想」",tp:"陪伴"},
+    {l:"C",t:"「如果完全没有限制，什么样的生活会让你有期待感？」",tp:"探问"}]}
+]
+
+const T={
+  海绵:{char:"深海聆听鲸",charEn:"THE DEEP LISTENER",emoji:"🐋",tag:"SPONGE TYPE",traits:["温柔","包容","稳定"],rarity:"★★★★★",rarityLabel:"极其稀有",typeLabel:"海绵型",levels:[4],tagline:"朋友什么都愿意告诉你，因为你从不评判",color:"#60A5FA",heroBg:"#2563EB",bg:["#EFF6FF","#DBEAFE"],svgId:"whale",truth:"你记住了所有人的秘密，却常常忘了照顾自己的感受。你的情感储量并非无限，但朋友们常常以为你是。",quote:"「跟你说话特别放松，感觉说什么你都接得住——我不知道你的感受是什么，但我觉得很安全。」",str:"你能默默承接对方的情绪，让人感到被接纳、不被评判。在你面前，朋友可以放下所有防御尽情倾诉——这是极为珍贵且稀有的能力。",bld:"你太擅长承接他人情绪，有时忘了表达自己的感受。这种单向流动久了，你可能悄悄感到疲惫，而对方甚至不知道你正在默默承受。",tips:[{ic:"💬",tx:"每次深度倾听后，试着说一句自己的感受：「听你说这些，我也有些难过」"},{ic:"🛡️",tx:"学会设定情感边界：当情绪过载时，温和地说「我需要一点时间消化」"},{ic:"🔄",tx:"把「我来陪你」升级为「我们一起」，让对方也有机会关注你的感受"}],lnote:"你处于第4级「专注倾听」。你已做到全身心关注，下一步是在倾听他人的同时表达自己的情感，迈向真正的双向连接。",theory:"深海聆听鲸对应 Rogers（1951）提出的无条件积极关注理论。你本能地为对方提供安全空间，让他们得以自由表达——这正是非指导性咨询的核心。"},
+
+  镜子:{char:"月夜共情枭",charEn:"THE EMPATHY SAGE",emoji:"🦉",tag:"MIRROR TYPE",traits:["洞察","精准","睿智"],rarity:"★★★★★",rarityLabel:"极其稀有",typeLabel:"镜子型",levels:[5,6],tagline:"你总能说出对方心里那句没说出口的话",color:"#C084FC",heroBg:"#7C3AED",bg:["#F5F3FF","#EDE9FE"],svgId:"owl",truth:"朋友倾诉完转头说「你懂我」的概率极高，有时精准到让人有点惊讶。但偶尔，对方也想知道镜子里有没有你自己。",quote:"「你说出了我自己都说不清楚的感受，这有点神奇，有点可怕（褒义）。」",str:"你能精准反映对方的话语和情绪，让对方感到被深刻理解。这是同理心能力最强的表现，也是六级倾听模型中最高阶的倾听境界。",bld:"有时过于冷静客观，像一面完美的镜子，但对方可能希望镜子里偶尔也能看到你自己的温度和情感回应。",tips:[{ic:"❤️",tx:"在准确反映对方情绪后，尝试分享一句自己类似的感受，从「反映」走向「共鸣」"},{ic:"🌊",tx:"允许对话中有更多情感流动：有时「我不知道说什么，但我在」就已经足够"},{ic:"🎭",tx:"试着偶尔表达自己的情绪反应，让对方也有机会关心你、了解你"}],lnote:"你处于第5–6级「同理心倾听」。你已达到核心层次，下一步是让自己的情感也流动起来，从精准反映迈向真正的双向深度共鸣。",theory:"月夜共情枭体现了 Rogers（1961）人本主义心理学中「共情」的最高境界——准确感知并反映对方的内心世界，同时保持情感稳定。这也是专业心理咨询师最核心的训练目标。"},
+
+  蹦床:{char:"彩虹活力豚",charEn:"THE VIBE AMPLIFIER",emoji:"🐬",tag:"TRAMPOLINE TYPE",traits:["活力","热情","感染力"],rarity:"★★★☆☆",rarityLabel:"活跃常见",typeLabel:"蹦床型",levels:[3],tagline:"话题到你这里，总能弹射出新的方向",color:"#2DD4BF",heroBg:"#0F766E",bg:["#F0FDFA","#CCFBF1"],svgId:"dolphin",truth:"你在共情，只是有时候对方的话还没说完，你就已经接住然后弹走了。你以为你在分享，对方感觉是被打断。",quote:"「和你聊天很开心，就是有时候我话说一半……嗯，你懂的。」",str:"你反应灵敏，善于互动，对话在你手里充满活力。你的热情和共鸣让朋友感到被重视，任何沉闷的气氛到你这里都能活起来。",bld:"对话有时不知不觉转移到了你自己身上。对方还没说完，你的分享就接上了——对方的感受还没被完全接住，就已经被弹射走了。",tips:[{ic:"⏸️",tx:"练习「3秒暂停法」：对方说完后，默数3秒再开口，确认他们真的说完了"},{ic:"❓",tx:"把第一反应从「分享自己的故事」改为「问一个关于他们的问题」"},{ic:"👁️",tx:"关注对方未说出口的部分：语气、停顿、重复出现的词——往往比内容更重要"}],lnote:"你处于第3级「选择性倾听」。你在积极回应，但还没有完全进入对方的情感世界。试着少说「我也……」，多说「你……」。",theory:"彩虹活力豚对应蹦床型倾听风格，这类倾听者往往在情感表达方面高度活跃，却容易因自我表露而减弱对对方的关注深度（Gottman, 1994）。"},
+
+  解决者:{char:"闪电行动虎",charEn:"THE FIXER",emoji:"🐯",tag:"SOLVER TYPE",traits:["果断","可靠","高效"],rarity:"★★★☆☆",rarityLabel:"行动常见",typeLabel:"解决者型",levels:[2,3],tagline:"遇到麻烦？你已经在列解决方案了",color:"#FB923C",heroBg:"#C2410C",bg:["#FFF7ED","#FFEDD5"],svgId:"tiger",truth:"对方还在倾诉，你的大脑已经开始制定三步计划了。你的出发点是爱，但有时候对方需要的只是一个听众，而不是一个顾问。",quote:"「有事找你准没错，你真的很管用——但我有时候只是想发泄一下，还没到要解决的阶段。」",str:"你行动力强，善于分析，朋友遇到实际问题第一个想到的就是你。你总能给出有用的建议，是朋友眼中最靠谱的存在之一。",bld:"你太急于解决问题，可能在对方还没准备好接受建议时就给出了方案。有时对方只是需要被听见，还没到「解决」的阶段。",tips:[{ic:"🙋",tx:"在给建议前先问：「你现在需要我帮你分析，还是只是想说说？」这一个问题改变一切"},{ic:"⏳",tx:"练习在给建议前保持5分钟的纯倾听：不打断，不评价，不给方案，只是陪伴"},{ic:"💡",tx:"记住：有时被听见比被解决更治愈——你的存在本身就是一种强大的帮助"}],lnote:"你处于第2–3级，出发点是真心想帮助对方。下一步是学会先放下「解决」的冲动，完全进入对方的感受世界。",theory:"闪电行动虎是 Gray（1992）「火星人与金星人」理论中典型的问题导向沟通模式，在解决实际困难上效率极高，但在情感支持场景中往往因过早进入「解决模式」而错过对方真正的需求。"},
+
+  陪伴:{char:"暖阳陪伴熊",charEn:"THE WARM COMPANION",emoji:"🐻",tag:"COMPANION TYPE",traits:["温暖","稳定","守护"],rarity:"★★★★☆",rarityLabel:"珍稀暖心",typeLabel:"陪伴型",levels:[4,5],tagline:"安静守候，你的存在本身就是礼物",color:"#F472B6",heroBg:"#BE185D",bg:["#FFF0F7","#FCE7F3"],svgId:"bear",truth:"你不需要说很多，你的存在就已经让对方感到安心了。但有时候你的沉默会让对方误以为你不在意——他们其实很想听到你的声音。",quote:"「跟你在一起，不需要说什么也感觉很安心——你永远都在，这让我觉得不孤单。」",str:"你用存在而非言语来表达关心。你的陪伴是一种稳定的力量，让对方感到不孤单、有人在旁边——很多人在最难受的时候最需要的就是这种安静的陪伴。",bld:"有时候你的沉默会让对方误会你不在意，或者他们需要听到你的声音来确认连接——试着偶尔用言语表达「我在」。",tips:[{ic:"🗣️",tx:"每隔一段时间，主动说一句「我在」或「我一直在听」，让对方感受到你的存在"},{ic:"🤝",tx:"在默默陪伴之后，尝试轻轻问「你现在感觉怎么样？」——这一步改变很大"},{ic:"💌",tx:"试试用文字表达关心：发一条简短的消息「刚才想到你，你还好吗？」"}],lnote:"你处于第4–5级。你的守护本能是珍贵的，下一步是让你的关心更「可见」——对方需要听到你，而不只是感觉到你。",theory:"暖阳陪伴熊体现了 Winnicott（1958）提出的「holding environment」（抱持性环境）理论——治愈有时不需要话语，安全的存在本身就是一种深度的心理支持。"},
+
+  探问:{char:"探索好奇蝶",charEn:"THE CURIOUS QUESTIONER",emoji:"🦋",tag:"QUESTIONER TYPE",traits:["好奇","洞察","引导"],rarity:"★★★★★",rarityLabel:"极其稀有",typeLabel:"探问型",levels:[5,6],tagline:"你问出了对方从没问过自己的问题",color:"#FBBF24",heroBg:"#B45309",bg:["#FFFBEB","#FEF3C7"],svgId:"butterfly",truth:"朋友和你聊完，往往比来之前更了解自己了。但你要小心：有时候对方已经很累了，不想再思考更多，只想倾诉。",quote:"「和你聊完，我反而把自己想清楚了——你怎么总能问到点子上？」",str:"你善于通过提问帮助对方整理思路，你的好奇心让对方感到被重视和理解。你不急着给答案，而是引导对方找到自己的答案——这是一种很高级的智慧。",bld:"有时候问题问太多，对方可能感觉像在接受采访，当他们只是想倾诉时，你的问题反而会造成压力。",tips:[{ic:"🎯",tx:"在问问题之前，先确认「你现在需要倾诉，还是想理清思路？」"},{ic:"🤫",tx:"练习「静默陪伴」：有时放下问题，只是安静在旁边，让对方有空间不思考"},{ic:"❤️",tx:"在问了一个好问题之后，给对方更多时间——不要急着问下一个，让答案慢慢浮现"}],lnote:"你处于第5–6级。你已经在用最高阶的方式倾听，下一步是学会在「引导」和「陪伴」之间灵活切换，读懂对方当下真正的需要。",theory:"探索好奇蝶体现了苏格拉底式对话（Socratic dialogue）的现代应用——通过提问引导对方自我发现，而非直接给予答案。这也是教练（coaching）领域的核心技术（Whitmore, 2002）。"}
+}
+
+const LMSGS=["正在召唤倾听鉴定委员会…","你的朋友们正在悄悄评价你…","分析中，请不要假装在看手机…","正在对照六级倾听量表…","即将揭晓你的倾听动物身份证…"]
+const LEMS=["🔍","🌙","🐾","✨","🎯","🦋"]
+const LVDEF=[
+  {n:6,name:"深度同理心倾听",desc:"完全进入对方情感世界"},
+  {n:5,name:"同理心倾听",desc:"感受并反映对方情绪"},
+  {n:4,name:"专注倾听",desc:"全身心关注，积极吸收"},
+  {n:3,name:"选择性倾听",desc:"选择性接收，部分回应"},
+  {n:2,name:"假装在听",desc:"身体在场，思维游离"},
+  {n:1,name:"忽视",desc:"完全不关注对方"}
+]
+
+let curQ=0,scores={海绵:0,蹦床:0,镜子:0,解决者:0,陪伴:0,探问:0},answers=[],answered=false,curType=null
+
+function animalSVG(type,size){
+  const m={海绵:'whale',镜子:'owl',蹦床:'dolphin',解决者:'tiger',陪伴:'bear',探问:'butterfly'}
+  const id=m[type]||'whale'
+  return `<svg width="${size}" height="${size}" viewBox="0 0 200 200" style="display:block"><use href="#svg-${id}"/></svg>`
+}
+
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));const el=document.getElementById(id);el.classList.add('active');el.scrollTop=0}
+function goIntro(){showPage('p-intro')}
+function startQuiz(){curQ=0;scores={海绵:0,蹦床:0,镜子:0,解决者:0,陪伴:0,探问:0};answers=[];renderQ(0);showPage('p-quiz')}
+
+function quizBack(){
+  if(curQ===0){showPage('p-intro');return}
+  const prev=answers[curQ-1]
+  if(prev){scores[prev]=Math.max(0,scores[prev]-1);answers[curQ-1]=undefined}
+  curQ--;renderQ(curQ)
+}
+
+function renderQ(n){
+  answered=false
+  const body=document.querySelector('.quiz-body')
+  if(body){body.classList.remove('q-enter','q-exit');void body.offsetWidth;body.classList.add('q-enter')}
+  const q=QS[n]
+  document.getElementById('qcnt').textContent=`${n+1} / 8`
+  document.getElementById('qbig').textContent=String(n+1).padStart(2,'0')
+  document.getElementById('qtext').textContent=q.text
+  const de=document.getElementById('qdots');de.innerHTML=''
+  for(let i=0;i<8;i++){const d=document.createElement('div');d.className='qdot'+(i<n?' done':i===n?' cur':'');de.appendChild(d)}
+  const cols=['rgba(96,165,250,.1)','rgba(192,132,252,.1)','rgba(45,212,191,.08)','rgba(251,146,60,.08)','rgba(244,114,182,.09)','rgba(251,191,36,.08)']
+  document.getElementById('p-quiz').style.background=`radial-gradient(ellipse at 50% -10%,${cols[n%6]} 0%,transparent 55%),var(--bg)`
+  const oe=document.getElementById('opts');oe.innerHTML=''
+  q.opts.forEach(o=>{
+    const d=document.createElement('div');d.className='opt'
+    d.innerHTML=`<div class="opt-lbl">${o.l}</div><div class="opt-txt">${o.t}</div>`
+    d.onclick=()=>pick(o.tp,d,n);oe.appendChild(d)
+  })
+}
+
+function pick(tp,el,n){
+  if(answered)return;answered=true
+  el.classList.add('sel');scores[tp]++;answers[n]=tp
+  const body=document.querySelector('.quiz-body')
+  setTimeout(()=>{if(body)body.classList.add('q-exit')},180)
+  setTimeout(()=>{curQ++;if(curQ<QS.length)renderQ(curQ);else doLoad()},380)
+}
+
+let lmInt=null,leInt=null
+function doLoad(){
+  showPage('p-loading');let i=0,j=0
+  const me=document.getElementById('load-msg'),le=document.getElementById('load-em')
+  me.textContent=LMSGS[0];le.textContent=LEMS[0]
+  lmInt=setInterval(()=>{me.style.opacity=0;setTimeout(()=>{i=(i+1)%LMSGS.length;me.textContent=LMSGS[i];me.style.opacity=1},200)},700)
+  leInt=setInterval(()=>{j=(j+1)%LEMS.length;le.textContent=LEMS[j]},600)
+  setTimeout(()=>{
+    clearInterval(lmInt);clearInterval(leInt)
+    const pr=['镜子','探问','海绵','陪伴','蹦床','解决者']
+    const mx=Math.max(...Object.values(scores))
+    curType=pr.find(t=>scores[t]===mx)
+    buildResult(curType);showPage('p-result');confetti(T[curType].color)
+  },2600)
+}
+
+function buildResult(k){
+  const t=T[k]
+  // Smooth gradient from heroBg to cream background
+  document.getElementById('r-hero').style.background = t.heroBg
+  document.getElementById('p-result').style.background = t.heroBg
+  document.getElementById('r-em-ani').innerHTML=animalSVG(k,144)
+  document.getElementById('r-em-glow').style.background='rgba(255,255,255,.3)'
+  const ctag=document.getElementById('r-char-tag')
+  ctag.textContent=`# ${t.tag}`
+  ctag.style.cssText='background:rgba(255,255,255,.22);color:#fff;border:1.5px solid rgba(255,255,255,.4)'
+  const rn=document.getElementById('r-name')
+  rn.textContent=t.char;rn.style.cssText='color:#fff'
+  document.getElementById('r-en').textContent=t.charEn
+  document.getElementById('r-stars').textContent=t.rarity
+  document.getElementById('r-stars').style.color='rgba(255,255,255,.95)'
+  document.getElementById('r-rarity-label').textContent=t.rarityLabel
+  const tb=document.getElementById('r-type-badge')
+  tb.textContent=`科学倾听类型 · ${t.typeLabel} · 第${t.levels.join('–')}级`
+  tb.style.cssText='background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.3);color:#fff'
+  document.getElementById('r-tagline').textContent=t.tagline
+  const tr=document.getElementById('r-traits');tr.innerHTML=''
+  t.traits.forEach(tx=>{
+    const s=document.createElement('span');s.className='trait'
+    s.textContent=tx;s.style.cssText='background:rgba(255,255,255,.22);color:#fff;border-color:rgba(255,255,255,.4)'
+    tr.appendChild(s)
+  })
+  document.getElementById('truth-txt').textContent=t.truth
+  document.getElementById('truth-q').textContent=t.quote
+  document.getElementById('truth-card').style.borderLeftColor=t.color
+  const sb=document.getElementById('sbars');sb.innerHTML=''
+  const ord=[{k:'镜子',sym:'svg-owl'},{k:'探问',sym:'svg-butterfly'},{k:'海绵',sym:'svg-whale'},{k:'陪伴',sym:'svg-bear'},{k:'蹦床',sym:'svg-dolphin'},{k:'解决者',sym:'svg-tiger'}]
+  ord.forEach(o=>{
+    const s=scores[o.k],pct=Math.round(s/8*100),main=o.k===k
+    const r=document.createElement('div');r.className='sbar-row'
+    r.innerHTML=`<div class="sbar-lbl" style="display:flex;align-items:center;gap:5px"><svg width="16" height="16" viewBox="0 0 200 200"><use href="#${o.sym}"/></svg>${T[o.k].char}</div><div class="sbar-track"><div class="sbar-fill" data-w="${pct}%" style="width:0%;background:${T[o.k].color}${main?'':'88'}"></div></div><div class="sbar-n">${s}</div>`
+    sb.appendChild(r)
+  })
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{document.querySelectorAll('.sbar-fill').forEach(f=>f.style.width=f.dataset.w)}))
+  document.getElementById('r-str').textContent=t.str
+  document.getElementById('r-bld').textContent=t.bld
+  const tp=document.getElementById('tips');tp.innerHTML=''
+  t.tips.forEach(tip=>{
+    const d=document.createElement('div');d.className='tip'
+    d.innerHTML=`<div class="tip-ic" style="background:${t.color}22">${tip.ic}</div><div class="tip-tx">${tip.tx}</div>`
+    tp.appendChild(d)
+  })
+  const lv=document.getElementById('lvmini');lv.innerHTML=''
+  LVDEF.forEach(l=>{
+    const hl=t.levels.includes(l.n)
+    const d=document.createElement('div');d.className='lvm'+(hl?' hl':'')
+    d.innerHTML=`<div class="lvm-n" style="${hl?`background:${t.color};color:#fff`:''}">${l.n}</div><div class="lvm-name">${l.name}</div>`
+    if(hl)d.style.borderColor=`${t.color}44`
+    lv.appendChild(d)
+  })
+  document.getElementById('lv-note').textContent=t.lnote
+  document.getElementById('th-h').textContent=`理论支撑：${t.char}的科学根源`
+  document.getElementById('th-b').textContent=t.theory
+  // Scroll-in stagger for result cards
+  document.querySelectorAll('.r-anim').forEach(el=>el.classList.remove('vis'))
+  const pResult=document.getElementById('p-result')
+  const obs=new IntersectionObserver((entries,ob)=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');ob.unobserve(e.target)}})
+  },{root:pResult,threshold:.1,rootMargin:'0px 0px -20px 0px'})
+  document.querySelectorAll('.r-anim').forEach(el=>obs.observe(el))
+}
+
+function confetti(col){
+  const box=document.getElementById('cfti');box.innerHTML=''
+  const colors=[col,'#fff','#FFD700',col+'bb','#18A449','#F472B6']
+  for(let i=0;i<70;i++){
+    const c=document.createElement('div');c.className='cf'
+    const w=Math.random()*10+5,h=Math.random()*10+5
+    c.style.cssText=`left:${Math.random()*100}%;width:${w}px;height:${h}px;background:${colors[i%colors.length]};opacity:${Math.random()*.6+.4};animation:cf${(i%3)+1} ${Math.random()*2+2}s ${Math.random()*1}s ease-in forwards`
+    box.appendChild(c)
+  }
+  setTimeout(()=>box.innerHTML='',4500)
+}
+
+function drawAnimalOnCanvas(ctx,svgId,x,y,w,h){
+  return new Promise(resolve=>{
+    const g=document.getElementById('svg-'+svgId)
+    if(!g){resolve();return}
+    const svgStr=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">${g.outerHTML}</svg>`
+    const img=new Image()
+    img.onload=()=>{ctx.drawImage(img,x,y,w,h);resolve()}
+    img.onerror=()=>resolve()
+    img.src='data:image/svg+xml;base64,'+btoa(unescape(encodeURIComponent(svgStr)))
+  })
+}
+
+async function saveImg(){
+  const t=T[curType],W=1080,H=1350
+  const cv=document.createElement('canvas');cv.width=W;cv.height=H
+  const c=cv.getContext('2d')
+  const g=c.createLinearGradient(0,0,0,H)
+  g.addColorStop(0,t.heroBg)
+  g.addColorStop(.55,t.color)
+  g.addColorStop(1,t.heroBg+'DD')
+  c.fillStyle=g;c.fillRect(0,0,W,H)
+  const gl=c.createRadialGradient(W*.3,H*.2,0,W*.3,H*.2,W*.5)
+  gl.addColorStop(0,'rgba(255,255,255,.18)');gl.addColorStop(1,'transparent')
+  c.fillStyle=gl;c.fillRect(0,0,W,H)
+  // Draw SVG animal instead of emoji
+  await drawAnimalOnCanvas(c,t.svgId,W/2-170,H*.07,340,340)
+  c.textAlign='center';c.textBaseline='middle'
+  const tagW=340,tagH=52,tagX=(W-tagW)/2
+  rrect(c,tagX,H*.37,tagW,tagH,26)
+  c.fillStyle='rgba(255,255,255,.22)';c.fill()
+  c.strokeStyle='rgba(255,255,255,.4)';c.lineWidth=2;c.stroke()
+  c.font=`700 22px -apple-system,'PingFang SC',sans-serif`
+  c.fillStyle='#fff';c.fillText(`# ${t.tag}`,W/2,H*.37+tagH/2)
+  c.textBaseline='alphabetic'
+  c.font=`900 ${t.char.length>4?72:84}px -apple-system,'PingFang SC',sans-serif`
+  c.fillStyle='#fff';c.fillText(t.char,W/2,H*.48)
+  c.font=`700 28px -apple-system,sans-serif`
+  c.fillStyle='rgba(255,255,255,.75)';c.fillText(t.charEn,W/2,H*.52)
+  const trs=t.traits,trW=160,trH=48,totalW=trs.length*trW+(trs.length-1)*14
+  let tx2=(W-totalW)/2
+  trs.forEach(trait=>{
+    rrect(c,tx2,H*.555,trW,trH,24)
+    c.fillStyle='rgba(255,255,255,.22)';c.fill()
+    c.strokeStyle='rgba(255,255,255,.4)';c.lineWidth=2;c.stroke()
+    c.font=`700 24px -apple-system,'PingFang SC',sans-serif`
+    c.fillStyle='#fff';c.textBaseline='middle';c.fillText(trait,tx2+trW/2,H*.555+trH/2)
+    c.textBaseline='alphabetic';tx2+=trW+14
+  })
+  c.font=`600 22px -apple-system,'PingFang SC',sans-serif`
+  c.fillStyle='rgba(255,255,255,.7)';c.fillText(`${t.rarityLabel}  ${t.rarity}`,W/2,H*.625)
+  c.font=`400 30px -apple-system,'PingFang SC',sans-serif`
+  c.fillStyle='rgba(255,255,255,.9)';wt(c,t.tagline,W/2,H*.685,W*.78,46)
+  c.font=`italic 400 24px -apple-system,'PingFang SC',sans-serif`
+  c.fillStyle='rgba(255,255,255,.78)';wt(c,t.quote,W/2,H*.755,W*.7,40)
+  c.strokeStyle='rgba(255,255,255,.2)';c.lineWidth=1
+  c.beginPath();c.moveTo(W*.2,H*.82);c.lineTo(W*.8,H*.82);c.stroke()
+  c.font=`700 24px -apple-system,'PingFang SC',sans-serif`
+  c.fillStyle='rgba(255,255,255,.80)';c.fillText('你是哪种倾听动物？',W/2,H*.858)
+  c.font=`400 19px -apple-system,sans-serif`
+  c.fillStyle='rgba(255,255,255,.55)';c.fillText('EI 情绪智能 · 同理心倾听风格测试',W/2,H*.895)
+  cv.toBlob(blob=>{
+    const url=URL.createObjectURL(blob),a=document.createElement('a')
+    a.href=url;a.download=`${t.char}.png`;a.click()
+    setTimeout(()=>URL.revokeObjectURL(url),1000)
+  },'image/png')
+  toast('🖼️ 图片已保存！')
+}
+
+function rrect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);ctx.lineTo(x+r,y+h);ctx.arcTo(x,y+h,x,y+h-r,r);ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);ctx.closePath()}
+function wt(ctx,text,x,y,mw,lh){const chars=[...text];let line='',lines=[];for(const ch of chars){const tt=line+ch;if(ctx.measureText(tt).width>mw&&line.length>0){lines.push(line);line=ch}else line=tt}if(line)lines.push(line);const sy=y-((lines.length-1)*lh)/2;lines.forEach((l,i)=>ctx.fillText(l,x,sy+i*lh))}
+function toast(msg){const e=document.getElementById('toast');e.textContent=msg;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2500)}
+function retake(){curType=null;curQ=0;scores={海绵:0,蹦床:0,镜子:0,解决者:0,陪伴:0,探问:0};answers=[];document.getElementById('p-result').style.background='';showPage('p-hero');initSplash()}
+
+function initSplash(){
+  const s=document.getElementById('hero-splash')
+  if(!s)return
+  s.classList.remove('exit','gone')
+  const dismiss=()=>{
+    s.classList.add('exit')
+    setTimeout(()=>s.classList.add('gone'),900)
+    window.removeEventListener('wheel',onWheel)
+    document.removeEventListener('touchmove',onTouch)
+    s.removeEventListener('click',dismiss)
+  }
+  const onWheel=()=>dismiss()
+  const onTouch=()=>dismiss()
+  window.addEventListener('wheel',onWheel,{once:true})
+  document.addEventListener('touchmove',onTouch,{once:true})
+  s.addEventListener('click',dismiss)
+}
+initSplash()
+</script>
+</body>
+</html>
