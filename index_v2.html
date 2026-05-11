@@ -716,6 +716,11 @@ html,body{height:100%;font-family:'Inter',-apple-system,'PingFang SC','Hiragino 
           <button class="btn btn-p" onclick="saveImg()">🖼️ 保存结果图片</button>
           <button class="btn btn-o" onclick="retake()">↩ 重新测试</button>
         </div>
+        <div class="r-anim" style="padding:0 0 32px;text-align:center">
+          <a href="learn.html" target="_blank" class="btn btn-p" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-size:1rem;padding:14px 32px;border-radius:14px">
+            📚 深入了解倾听科学
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -982,14 +987,23 @@ async function saveImg(){
   c.fillStyle='rgba(255,255,255,.7)';c.fillText(`${t.rarityLabel}  ${t.rarity}`,W/2,H*.625)
   c.font=`400 30px -apple-system,'PingFang SC',sans-serif`
   c.fillStyle='rgba(255,255,255,.9)';wt(c,t.tagline,W/2,H*.685,W*.78,46)
-  c.font=`italic 400 24px -apple-system,'PingFang SC',sans-serif`
-  c.fillStyle='rgba(255,255,255,.78)';wt(c,t.quote,W/2,H*.755,W*.7,40)
+  c.font=`italic 400 22px -apple-system,'PingFang SC',sans-serif`
+  c.fillStyle='rgba(255,255,255,.78)';wt(c,t.quote,W/2,H*.755,W*.84,40)
+  // ── 底部分割线 ──
   c.strokeStyle='rgba(255,255,255,.2)';c.lineWidth=1
-  c.beginPath();c.moveTo(W*.2,H*.82);c.lineTo(W*.8,H*.82);c.stroke()
-  c.font=`700 24px -apple-system,'PingFang SC',sans-serif`
-  c.fillStyle='rgba(255,255,255,.80)';c.fillText('你是哪种倾听动物？',W/2,H*.858)
-  c.font=`400 19px -apple-system,sans-serif`
-  c.fillStyle='rgba(255,255,255,.55)';c.fillText('EI 情绪智能 · 同理心倾听风格测试',W/2,H*.895)
+  c.beginPath();c.moveTo(W*.1,H*.826);c.lineTo(W*.9,H*.826);c.stroke()
+  // ── 右侧：二维码（垂直居中于底部区域）──
+  const qrSize=110,qrX=Math.round(W*.655),qrY=Math.round(H*.845)
+  const qrOk=await drawQR(c,qrX,qrY,qrSize)
+  // ── 左侧：文字（三行竖向居中）──
+  c.textAlign='left';c.textBaseline='alphabetic'
+  const lx=W*.1,ly=Math.round(H*.876)
+  c.font=`800 26px -apple-system,'PingFang SC',sans-serif`
+  c.fillStyle='rgba(255,255,255,.88)';c.fillText('你是哪种倾听动物？',lx,ly)
+  c.font=`400 17px -apple-system,'PingFang SC',sans-serif`
+  c.fillStyle='rgba(255,255,255,.55)';c.fillText('EI 情绪智能 · 同理心倾听风格测试',lx,ly+34)
+  c.font=`500 14px -apple-system,'PingFang SC',sans-serif`
+  c.fillStyle='rgba(255,255,255,.38)';c.fillText(qrOk?'扫码开始测试 →':'来测测你是哪种倾听动物',lx,ly+60)
   cv.toBlob(blob=>{
     const url=URL.createObjectURL(blob),a=document.createElement('a')
     a.href=url;a.download=`${t.char}.png`;a.click()
@@ -1002,6 +1016,34 @@ function rrect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r
 function wt(ctx,text,x,y,mw,lh){const chars=[...text];let line='',lines=[];for(const ch of chars){const tt=line+ch;if(ctx.measureText(tt).width>mw&&line.length>0){lines.push(line);line=ch}else line=tt}if(line)lines.push(line);const sy=y-((lines.length-1)*lh)/2;lines.forEach((l,i)=>ctx.fillText(l,x,sy+i*lh))}
 function toast(msg){const e=document.getElementById('toast');e.textContent=msg;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2500)}
 function retake(){curType=null;curQ=0;scores={海绵:0,蹦床:0,镜子:0,解决者:0,陪伴:0,探问:0};answers=[];document.getElementById('p-result').style.background='';showPage('p-hero');initSplash()}
+
+// ── 网站地址配置 ──
+// 部署到 GitHub Pages 或其他平台后，把地址填在这里，分享图片里的二维码就会指向你的网站
+// 例如: 'https://yourname.github.io/ei-quiz/'   留空时自动使用当前页面地址（本地打开时不适合扫码）
+const SITE_URL='https://jiangxinchen2007.github.io/ei-listening-quiz/index_v2.html'
+
+function drawQR(ctx,x,y,size){
+  return new Promise(resolve=>{
+    const url=SITE_URL||location.href.split('?')[0]
+    const src=`https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(url)}&bgcolor=ffffff&color=111111&margin=2&format=svg`
+    const img=new Image()
+    img.crossOrigin='anonymous'
+    img.onload=()=>{
+      // 白色圆角背景
+      rrect(ctx,x-12,y-12,size+24,size+24,12)
+      ctx.fillStyle='rgba(255,255,255,.95)';ctx.fill()
+      ctx.drawImage(img,x,y,size,size)
+      // 「扫码体验」小标签
+      ctx.textAlign='center';ctx.textBaseline='middle'
+      ctx.font=`600 15px -apple-system,'PingFang SC',sans-serif`
+      ctx.fillStyle='rgba(255,255,255,.5)'
+      ctx.fillText('扫码体验',x+size/2,y+size+22)
+      resolve(true)
+    }
+    img.onerror=()=>resolve(false)
+    img.src=src
+  })
+}
 
 function initSplash(){
   const s=document.getElementById('hero-splash')
