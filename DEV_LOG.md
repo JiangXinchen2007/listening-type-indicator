@@ -1,7 +1,7 @@
 # EI 情绪智能测试网站 · 开发日志
 
-> 上次更新：2026-05-11  
-> 对话轮次：已完成 Round 1–6 优化
+> 上次更新：2026-05-12  
+> 对话轮次：已完成 Round 1–6 优化 + 学习页完善 + 分享图QR码 + v3双语版（进行中）
 
 ---
 
@@ -13,7 +13,9 @@
 | 形式 | 纯静态单文件 HTML（无框架、无后端、无外部依赖） |
 | 部署 | 可直接双击浏览器打开（`file://`），也可部署到 GitHub Pages |
 | 主文件（只读原版） | `/Users/jxc/Desktop/EI/第二阶段/index.html`（797行，暗色 glassmorphism 风格） |
-| 当前开发文件 | `/Users/jxc/Desktop/EI/第二阶段/index_v2.html`（插画风改版，Round 5 最新） |
+| 当前开发文件 | `/Users/jxc/Desktop/EI/第二阶段/index_v2.html`（插画风，1068行，已部署） |
+| 学习页 | `/Users/jxc/Desktop/EI/第二阶段/learn.html`（860行，已部署） |
+| 下一版本（进行中） | `/Users/jxc/Desktop/EI/第二阶段/index_v3.html`（中英双语切换，尚未创建） |
 
 ---
 
@@ -167,7 +169,28 @@ r-hero.style.background = `linear-gradient(to bottom, ${t.heroBg} 0%, ${t.heroBg
 ### Round 4（插画风 UI 大改版）
 - 浅色 Duolingo 风格，绿色主色，SVG 动物（重描边+大眼睛），heroBg 深色背景系统
 
-### Round 6（布局精修 + 渐变可读性 + 入场动效升级）✅ 当前最新
+### Round 7（学习页完善 + 分享图QR码 + GitHub 部署）✅ 当前最新（2026-05-12）
+
+- **新增** `learn.html` — 独立倾听科学学习页，从结果页「📚 深入了解倾听科学」按钮跳转
+  - 滚动进度条（`#scroll-bar`，position:fixed，宽度跟随 scrollY）
+  - 浮动「返回顶部」按钮（scrollY > 400 显示，平滑滚动）
+  - 3D 翻转 Myth 卡片（`.mflip`，6张，正面=误区红，背面=真相绿，perspective: 900px）
+  - 数字计数器动画（IntersectionObserver 触发，cubic ease-out，`performance.now()` 驱动）
+  - 手风琴展开（`.practice-a`，`max-height: 0 → 640px` CSS 过渡，无 JS 显隐）
+  - 英雄区光晕装饰（`.hero-orb`，blur + 动画）
+- **新增** 结果页「📚 深入了解倾听科学」按钮（链接到 `learn.html`，`target="_blank"`）
+- **新增** Canvas 分享图 QR 码功能
+  - `drawQR()` 异步函数，调用 `api.qrserver.com` 生成 SVG 格式二维码
+  - 底部布局：左侧三行文字 + 右侧二维码（`qrSize=110px`，白色圆角背景）
+  - 分割线延伸至 `W*0.1 ~ W*0.9`，更宽更平衡
+  - `SITE_URL` 配置变量指向 GitHub Pages 地址
+- **修复** 分享图 quote 文字单行：字体 24px→22px，最大宽度 `W*0.7→W*0.84`
+- **部署** GitHub Pages
+  - 仓库：`jiangxinchen2007/ei-listening-quiz`
+  - 线上地址：`https://jiangxinchen2007.github.io/ei-listening-quiz/index_v2.html`
+  - `learn.html` 同目录部署，按钮 `href="learn.html"` 直接跳转
+
+### Round 6（布局精修 + 渐变可读性 + 入场动效升级）
 - **新增** 首页 Splash 入场：大字横版标题全屏显示，向下滑动（或点击）触发退出动效，标题缩小上移淡出，主页内容浮现
 - **新增** 实体「返回」按钮：白色背景 + 阴影 + 按下效果，替换原文字链接
 - **升级** 六阶段模块：全部六级使用绿色，级别1→6 递进渐变（rgba .015 → .20），深浅各不相同
@@ -190,22 +213,43 @@ r-hero.style.background = `linear-gradient(to bottom, ${t.heroBg} 0%, ${t.heroBg
 
 ---
 
+## 下一步计划
+
+### index_v3.html — 中英双语切换（待开发）
+
+**功能设计：**
+- 固定悬浮按钮 `CN ｜ EN`，CSS: `position:fixed; top:16px; right:20px; z-index:200`
+- `DATA = { zh: { QS, T, LVDEF, LMSGS, UI }, en: { ... } }` 双语数据结构
+- `LNG` 变量 + `toggleLang()` + `applyLang()` 函数
+- 静态文字加 `data-t="key"` 属性，`applyLang` 批量替换
+- 计分 key 仍用中文（海绵/镜子/…），仅展示层切换语言
+- 切换时如在 quiz 页，调用 `renderQ(curQ)` 重渲当前题
+
+**内容现状：**
+- 动物英文名已在 `T[k].charEn`（如 THE DEEP LISTENER）
+- tag 字段已是英文（SPONGE TYPE 等）
+- 需翻译：8道题目+24个选项、6个动物的详细描述（truth/quote/str/bld/tips/lnote/theory）、LVDEF 名称、LMSGS、所有按钮/标签
+
+---
+
 ## 给下一个对话的交接说明
 
 1. **直接阅读本文件**即可了解当前状态，无需重新探索代码
-2. **只修改 `index_v2.html`**，`index.html` 是只读原版，永远不动
-3. 测试方法：直接双击 `index_v2.html` 用浏览器打开（`file://`），不需要本地服务器
-4. **当前阶段**：Round 5 已完成，可继续收集截图反馈进行 Round 6
-5. 代码风格：CSS 单行压缩，JS 保留可读性，HTML 保持缩进
-6. 翻转卡片：`.acard` / `.tp` 点击触发 `this.classList.toggle('flipped')`
-7. 动效触发：依赖 `.page.active` CSS 选择器，`showPage()` 添加 `.active` 即触发
-8. 如需查阅题目数据、T 对象、JS 函数完整定义，参见 `index_v2.html` 的 `<script>` 段
+2. `index.html` 是只读原版，永远不动；`index_v2.html` 是稳定版（已部署）；`index_v3.html` 是下一版本（未创建）
+3. 测试方法：直接双击浏览器打开（`file://`），不需要本地服务器
+4. 代码风格：CSS 单行压缩，JS 保留可读性，HTML 保持缩进
+5. 翻转卡片：`.acard` / `.tp` 点击触发 `this.classList.toggle('flipped')`
+6. 动效触发：依赖 `.page.active` CSS 选择器，`showPage()` 添加 `.active` 即触发
+7. Canvas 分享图：`saveImg()` 为 async，依赖 `drawQR()`（需网络加载 QR）和 `drawAnimalOnCanvas()`（SVG→Canvas）
+8. 如需查阅题目数据、T 对象、JS 函数完整定义，参见 `index_v2.html` 的 `<script>` 段（737–1065行）
 
 ## 文件结构
 
 ```
 /Users/jxc/Desktop/EI/第二阶段/
 ├── index.html      ← 原版（只读，暗色 glassmorphism，797行）
-├── index_v2.html   ← 当前开发版（插画风，Round 5 最新）
+├── index_v2.html   ← 当前稳定版（插画风，1068行，已部署）
+├── index_v3.html   ← 下一版本（中英双语，未创建）
+├── learn.html      ← 倾听科学学习页（860行，已部署）
 └── DEV_LOG.md      ← 本文件
 ```
