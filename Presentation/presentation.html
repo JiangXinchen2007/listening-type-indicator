@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>你是哪种倾听动物？— EI 第二阶段成果汇报</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#FDF8F0;--card:#FFFFFF;
+  --bd:rgba(0,0,0,.09);--bdh:rgba(0,0,0,.18);
+  --tx:#18110A;--dim:#4A3828;--mu:#9B8878;
+  --pri:#18A449;--pri-d:#0D5C2A;--pri-l:#DCFCE7;
+  --whale:#60A5FA;--whale-d:#1D4ED8;--whale-l:#EFF6FF;
+  --owl:#C084FC;--owl-d:#7C3AED;--owl-l:#F5F3FF;
+  --dolphin:#2DD4BF;--dolphin-d:#0F766E;--dolphin-l:#F0FDFA;
+  --tiger:#FB923C;--tiger-d:#C2410C;--tiger-l:#FFF7ED;
+  --bear:#F472B6;--bear-d:#BE185D;--bear-l:#FFF0F7;
+  --butterfly:#FBBF24;--butterfly-d:#B45309;--butterfly-l:#FFFBEB;
+}
+html,body{height:100%;overflow:hidden;font-family:'Inter',-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;-webkit-font-smoothing:antialiased;background:#111;color:var(--tx);user-select:none}
+
+/* ── SLIDE SYSTEM ── */
+.slide{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;opacity:0;pointer-events:none;transition:opacity .5s cubic-bezier(.16,1,.3,1),transform .5s cubic-bezier(.16,1,.3,1);transform:translateX(60px);overflow:hidden;padding:56px 68px 52px}
+.slide.active{opacity:1;pointer-events:all;transform:translateX(0)}
+.slide.go-left{opacity:0;transform:translateX(-60px);transition:opacity .4s ease,transform .4s ease}
+.s-center{justify-content:center}
+
+/* ── ANIMATIONS ── */
+@keyframes fu{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+@keyframes glow{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:.65;transform:scale(1.1)}}
+.slide.active [data-s]{animation:fu .55s calc(var(--d,0)*1ms) both cubic-bezier(.22,1,.36,1)}
+
+/* ── TYPOGRAPHY ── */
+.t-hero{font-size:clamp(60px,7vw,96px);font-weight:900;letter-spacing:-.055em;line-height:.92;color:var(--tx);white-space:nowrap}
+.t-xl{font-size:clamp(30px,4.2vw,58px);font-weight:900;letter-spacing:-.04em;line-height:1.05;color:var(--tx)}
+.ey{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);margin-bottom:6px}
+.t-body{font-size:14.5px;color:var(--dim);line-height:1.85}
+.green{color:var(--pri)}
+.divider{width:42px;height:4px;background:var(--pri);border-radius:2px;margin:10px 0 20px}
+
+/* ── PILL ── */
+.pill{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase}
+.pill-g{background:rgba(24,164,73,.1);border:1.5px solid rgba(24,164,73,.25);color:var(--pri)}
+.dot-blink{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0;animation:blink 2s ease-in-out infinite}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:15px;font-weight:800;border-radius:14px;cursor:pointer;padding:12px 28px;letter-spacing:-.01em;transition:transform .08s ease,box-shadow .08s ease;border:none;text-decoration:none}
+.btn-p{background:var(--pri);color:#fff;box-shadow:0 5px 0 var(--pri-d)}
+.btn-p:hover{filter:brightness(1.07);transform:translateY(-2px);box-shadow:0 7px 0 var(--pri-d)}
+.btn-p:active{transform:translateY(4px)!important;box-shadow:0 1px 0 var(--pri-d)!important}
+
+/* ── CHROME: counter, speaker badge, dots, nav ── */
+#counter{position:fixed;top:18px;right:22px;font-size:12px;font-weight:700;color:rgba(0,0,0,.22);z-index:200;letter-spacing:.05em}
+#spk-badge{position:fixed;top:12px;right:80px;background:rgba(24,164,73,.1);border:1.5px solid rgba(24,164,73,.25);color:var(--pri);font-size:11px;font-weight:700;padding:5px 13px;border-radius:999px;z-index:200;letter-spacing:.04em;white-space:nowrap;transition:background .3s,border-color .3s,color .3s;max-width:260px;overflow:hidden;text-overflow:ellipsis}
+#spk-badge.on-dark{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3);color:#fff}
+#pdots{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:7px;z-index:200;align-items:center}
+.pd{width:7px;height:7px;border-radius:4px;background:rgba(0,0,0,.12);transition:all .4s cubic-bezier(.34,1.56,.64,1);cursor:pointer}
+.pd.on{width:22px;background:var(--pri)}
+.nav{position:fixed;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;background:var(--card);border:2.5px solid var(--bd);box-shadow:0 4px 0 rgba(0,0,0,.1);display:flex;align-items:center;justify-content:center;font-size:17px;cursor:pointer;z-index:200;color:var(--dim);transition:transform .12s,box-shadow .12s,border-color .12s;font-weight:700}
+.nav:hover{border-color:var(--bdh);transform:translateY(calc(-50% - 2px));box-shadow:0 6px 0 rgba(0,0,0,.1)}
+.nav:active{transform:translateY(calc(-50% + 3px))!important;box-shadow:0 1px 0 rgba(0,0,0,.1)!important}
+#np{left:14px}#nn{right:14px}
+#np.dim,#nn.dim{opacity:.28;pointer-events:none}
+
+/* ── NOTES PANEL ── */
+#notes-btn{position:fixed;bottom:50px;right:18px;background:rgba(24,17,10,.72);border:none;border-radius:999px;padding:7px 14px;font-size:11px;font-weight:700;color:rgba(255,255,255,.7);cursor:pointer;z-index:201;letter-spacing:.04em;transition:background .2s}
+#notes-btn:hover{background:rgba(24,17,10,.9)}
+#notes-panel{position:fixed;bottom:0;left:0;right:0;background:rgba(18,12,6,.96);border-radius:18px 18px 0 0;padding:18px 28px 32px;transform:translateY(100%);transition:transform .4s cubic-bezier(.16,1,.3,1);z-index:200;max-height:42vh;overflow-y:auto}
+#notes-panel.open{transform:translateY(0)}
+#n-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.38);margin-bottom:8px}
+#n-speaker{font-size:13px;font-weight:800;color:var(--pri);margin-bottom:6px}
+#n-text{font-size:13.5px;line-height:1.85;color:rgba(255,255,255,.82);white-space:pre-line}
+#n-time{margin-top:10px;font-size:11.5px;color:rgba(255,255,255,.35);font-weight:600}
+
+/* ─────────────────────────────────────────
+   SLIDE-SPECIFIC STYLES
+───────────────────────────────────────── */
+
+/* S1 Cover */
+.parade{display:flex;gap:14px}
+.em{font-size:44px;display:block;animation:float 3s ease-in-out infinite}
+.em:nth-child(2){animation-delay:.28s}.em:nth-child(3){animation-delay:.56s}
+.em:nth-child(4){animation-delay:.84s}.em:nth-child(5){animation-delay:1.12s}.em:nth-child(6){animation-delay:1.4s}
+.members-row{display:flex;gap:8px 20px;justify-content:center;flex-wrap:wrap}
+.mb{text-align:center}
+.mb-name{font-size:14px;font-weight:700;color:var(--tx)}
+.mb-id{font-size:10.5px;color:var(--mu);margin-top:1px;letter-spacing:.03em}
+.mb.lead .mb-name{color:var(--pri);font-weight:800}
+.mb.lead .mb-id{color:var(--pri);opacity:.75}
+
+/* S2 Journey */
+.jrow{display:flex;gap:22px;align-items:stretch;width:100%;max-width:900px}
+.jcard{flex:1;border-radius:22px;padding:28px 24px;text-align:center}
+.jdone{background:var(--pri-l);border:2.5px solid rgba(24,164,73,.3);box-shadow:0 6px 0 rgba(13,92,42,.22)}
+.jcur{background:var(--card);border:2.5px solid var(--pri);box-shadow:0 6px 0 var(--pri-d)}
+.jarr{font-size:30px;color:var(--pri);font-weight:900;flex-shrink:0;display:flex;align-items:center}
+
+/* S3 Motivation */
+.trend-row{display:flex;gap:12px;margin-top:8px}
+.trend-tag{background:var(--card);border:2px solid var(--bd);border-radius:12px;padding:10px 16px;font-size:14px;font-weight:700;color:var(--tx);box-shadow:0 3px 0 rgba(0,0,0,.07);display:flex;align-items:center;gap:8px}
+.trend-tag .fire{font-size:18px}
+.ins-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:13px;margin-top:0}
+.ins-card{background:var(--card);border:2.5px solid var(--bd);border-radius:18px;padding:20px;box-shadow:0 4px 0 rgba(0,0,0,.07)}
+.ins-ic{font-size:28px;margin-bottom:10px;display:block}
+.ins-h{font-size:15px;font-weight:900;color:var(--tx);margin-bottom:6px;letter-spacing:-.02em}
+.ins-p{font-size:13px;color:var(--dim);line-height:1.8}
+
+/* S4 Theory */
+.lvs{display:flex;flex-direction:column;gap:8px;flex:1;min-width:0}
+.lv{display:flex;align-items:flex-start;gap:12px;padding:11px 15px;border-radius:13px;background:rgba(0,0,0,.03);border:1.5px solid transparent;transition:background .3s,border-color .3s}
+.lv.hi{background:var(--pri-l);border-color:rgba(24,164,73,.22)}
+.lv-n{width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.07);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--mu);flex-shrink:0;margin-top:1px}
+.lv.hi .lv-n{background:var(--pri);color:#fff}
+.lv-name{font-size:13.5px;font-weight:700;color:var(--dim)}.lv.hi .lv-name{color:var(--tx)}
+.lv-desc{font-size:11.5px;color:var(--mu);margin-top:2px;line-height:1.4}
+
+/* S5 Approach */
+.agrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;max-width:920px}
+.acard{background:var(--card);border:2.5px solid var(--bd);border-radius:20px;padding:24px;box-shadow:0 4px 0 rgba(0,0,0,.07);display:flex;flex-direction:column}
+.acard-ic{font-size:32px;margin-bottom:10px;display:block}
+.acard-h{font-size:18px;font-weight:900;color:var(--tx);margin-bottom:7px;letter-spacing:-.03em;line-height:1.15}
+.acard-p{font-size:13px;color:var(--dim);line-height:1.82;flex:1}
+
+/* S6 Animals */
+.angrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%;max-width:980px}
+.ancard{border-radius:20px;border:2.5px solid;padding:18px 14px;cursor:pointer;transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .2s;text-align:center;position:relative}
+.ancard:hover{transform:translateY(-5px)}
+.an-em{font-size:38px;display:block;margin-bottom:6px;filter:drop-shadow(0 3px 6px rgba(0,0,0,.15))}
+.an-name{font-size:14px;font-weight:800;color:var(--tx)}
+.an-type{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-top:3px}
+.an-lv{font-size:11px;color:var(--mu);margin-top:4px}
+.an-badge{position:absolute;top:8px;right:8px;font-size:9px;font-weight:700;padding:2px 7px;border-radius:999px;background:rgba(255,255,255,.82);color:var(--tx)}
+
+/* MODAL */
+#modal-wrap{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:400;align-items:center;justify-content:center}
+#modal-inner{background:var(--card);border-radius:28px;max-width:480px;width:92%;overflow:hidden;transform:scale(.82);transition:transform .3s cubic-bezier(.34,1.56,.64,1);box-shadow:0 24px 60px rgba(0,0,0,.22)}
+#modal-wrap.open{display:flex}
+#modal-wrap.open #modal-inner{transform:scale(1)}
+#modal-head{padding:32px 36px 28px;text-align:center;margin-bottom:8px}
+#modal-body{padding:4px 36px 32px;display:flex;flex-direction:column;gap:0}
+.msec{padding:14px 0;border-top:1.5px solid rgba(0,0,0,.07)}
+.msec:first-child{border-top:none;padding-top:0}
+.msec-label{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-bottom:7px}
+.msec-text{font-size:14.5px;color:var(--dim);line-height:1.88}
+
+/* S7 Demo */
+.demo-wrap{display:flex;gap:28px;align-items:flex-start;width:100%;max-width:980px}
+.feat-col{display:flex;flex-direction:column;gap:12px;flex:1}
+.feat{background:var(--card);border:2.5px solid var(--bd);border-radius:17px;padding:15px 18px;box-shadow:0 4px 0 rgba(0,0,0,.07);display:flex;gap:13px;align-items:flex-start}
+.feat-ic{font-size:24px;flex-shrink:0;margin-top:2px}
+.feat-h{font-size:15px;font-weight:800;color:var(--tx);letter-spacing:-.02em}
+.feat-p{font-size:12.5px;color:var(--mu);line-height:1.65;margin-top:3px}
+.qr-col{flex:0 0 178px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.qr-box{width:158px;height:158px;background:var(--card);border:2.5px solid var(--bd);border-radius:18px;display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:0 5px 0 rgba(0,0,0,.08)}
+.qr-box img{width:138px;height:138px;border-radius:6px}
+
+/* S8 Timeline */
+.timeline{display:flex;flex-direction:column;gap:7px;flex:1}
+.trow{display:flex;gap:12px;align-items:flex-start}
+.tdots{display:flex;flex-direction:column;align-items:center}
+.tdot{width:26px;height:26px;border-radius:50%;background:var(--pri-l);border:2.5px solid var(--pri);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--pri);flex-shrink:0}
+.tline{width:2px;flex:1;background:rgba(24,164,73,.18);min-height:8px}
+.tc{flex:1;background:var(--card);border:2px solid var(--bd);border-radius:13px;padding:9px 13px;box-shadow:0 3px 0 rgba(0,0,0,.06)}
+.tc.cur{border-color:var(--pri);border-width:2.5px}
+.tv{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--pri)}
+.th{font-size:13.5px;font-weight:700;color:var(--tx);margin-top:1px}
+.td{font-size:11.5px;color:var(--mu);line-height:1.5;margin-top:1px}
+
+/* S9 Reflection */
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;max-width:920px}
+.rcard{background:var(--card);border:2.5px solid var(--bd);border-left-width:5px;border-radius:20px;padding:22px;box-shadow:0 4px 0 rgba(0,0,0,.07)}
+.rcard-ic{font-size:28px;margin-bottom:8px;display:block}
+.rcard-h{font-size:17px;font-weight:900;color:var(--tx);margin-bottom:8px;letter-spacing:-.025em;line-height:1.15}
+.rcard-t{font-size:13px;color:var(--dim);line-height:1.85}
+
+/* S10 Thank You */
+.ty{font-size:clamp(68px,10vw,116px);font-weight:900;color:var(--tx);letter-spacing:-.055em;line-height:.88}
+#ty-btn{font-size:clamp(52px,7.5vw,96px);font-weight:900;letter-spacing:-.04em;color:#fff;background:var(--pri);border:none;border-radius:28px;padding:18px 64px;cursor:pointer;box-shadow:0 8px 0 var(--pri-d);transition:transform .08s ease,box-shadow .08s ease;line-height:1;font-family:inherit;-webkit-font-smoothing:antialiased;text-shadow:0 2px 0 rgba(0,0,0,.15),0 4px 0 rgba(0,0,0,.1),0 6px 12px rgba(0,0,0,.15)}
+#ty-btn:hover{filter:brightness(1.07);transform:translateY(-3px);box-shadow:0 11px 0 var(--pri-d)}
+#ty-btn:active{transform:translateY(6px)!important;box-shadow:0 2px 0 var(--pri-d)!important}
+#confetti-canvas{position:fixed;inset:0;pointer-events:none;z-index:500}
+.chip-m{background:var(--card);border:2px solid var(--bd);border-radius:16px;padding:10px 18px;text-align:center;box-shadow:0 4px 0 rgba(0,0,0,.07);min-width:100px}
+.chip-m-name{font-size:15px;font-weight:800;color:var(--tx);letter-spacing:-.01em}
+.chip-m-id{font-size:10.5px;color:var(--mu);margin-top:3px;letter-spacing:.03em}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 1 · COVER
+═══════════════════════════════════════════ -->
+<section class="slide s-center" id="s1">
+  <div style="position:relative;z-index:1;text-align:center;max-width:820px;width:100%;display:flex;flex-direction:column;align-items:center">
+
+    <div class="parade" data-s style="--d:50;justify-content:center;margin-bottom:18px">
+      <span class="em">🐋</span><span class="em">🦉</span><span class="em">🐬</span>
+      <span class="em">🐯</span><span class="em">🐻</span><span class="em">🦋</span>
+    </div>
+
+    <div class="pill pill-g" data-s style="--d:130;margin-bottom:16px">
+      <span class="dot-blink"></span>七匹狼 · EI 情绪智能发展 · 2026 Spring
+    </div>
+
+    <h1 class="t-hero" data-s style="--d:230">你是哪种<span class="green">倾听动物</span>？</h1>
+
+    <p data-s style="--d:340;font-size:17px;color:var(--dim);margin-top:14px;font-weight:600;letter-spacing:-.01em">
+      第二阶段成果汇报 · 大学生同理心倾听风格探究
+    </p>
+
+    <div data-s style="--d:430;display:flex;gap:10px;justify-content:center;margin-top:16px">
+      <div class="pill pill-g">8道情境题</div>
+      <div class="pill pill-g">6种动物类型</div>
+      <div class="pill pill-g">已上线 GitHub Pages</div>
+    </div>
+
+    <!-- Member list -->
+    <div data-s style="--d:560;margin-top:26px;padding-top:22px;border-top:1.5px solid rgba(0,0,0,.09);width:100%">
+      <div style="font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--mu);margin-bottom:13px">小组成员</div>
+      <div class="members-row">
+        <div class="mb">
+          <div class="mb-name">姜昕辰</div>
+          <div class="mb-id">2530031119</div>
+        </div>
+        <div class="mb">
+          <div class="mb-name">黎宇刚</div>
+          <div class="mb-id">2530031157</div>
+        </div>
+        <div class="mb">
+          <div class="mb-name">廖子贤</div>
+          <div class="mb-id">2530031167</div>
+        </div>
+        <div class="mb">
+          <div class="mb-name">梁家倩</div>
+          <div class="mb-id">2530031163</div>
+        </div>
+        <div class="mb">
+          <div class="mb-name">林烜正</div>
+          <div class="mb-id">2530031173</div>
+        </div>
+        <div class="mb">
+          <div class="mb-name">吴天钰</div>
+          <div class="mb-id">2530031322</div>
+        </div>
+        <div class="mb">
+          <div class="mb-name">俞锦诚</div>
+          <div class="mb-id">2530031368</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- decorative blobs -->
+  <div style="position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden">
+    <div style="position:absolute;top:-80px;right:-80px;width:380px;height:380px;border-radius:50%;background:var(--pri-l);filter:blur(90px);opacity:.7;animation:glow 4s ease-in-out infinite"></div>
+    <div style="position:absolute;bottom:-60px;left:-60px;width:260px;height:260px;border-radius:50%;background:var(--whale-l);filter:blur(70px);opacity:.6;animation:glow 4s 1s ease-in-out infinite"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 2 · JOURNEY
+═══════════════════════════════════════════ -->
+<section class="slide s-center" id="s2">
+  <div style="width:100%;max-width:920px">
+
+    <div data-s style="--d:0">
+      <div class="ey">Project Journey</div>
+      <h2 class="t-xl">从<span class="green">理解同理心</span>，到<span class="green">实践倾听</span></h2>
+      <div class="divider"></div>
+    </div>
+
+    <div class="jrow" data-s style="--d:220">
+      <div class="jcard jdone">
+        <div style="font-size:28px;margin-bottom:12px">✅</div>
+        <div class="pill pill-g" style="margin:0 auto 14px">Phase 1 · 已完成</div>
+        <div style="font-size:22px;font-weight:900;color:var(--tx);margin-bottom:10px">理解同理心</div>
+        <div style="font-size:14px;color:var(--dim);line-height:1.8">
+          主题：Empathy<br>
+          形式：Workshop + PPT<br>
+          内容：同理心的理论与层次
+        </div>
+      </div>
+
+      <div class="jarr">→</div>
+
+      <div class="jcard jcur">
+        <div style="font-size:28px;margin-bottom:12px">🌟</div>
+        <div style="display:inline-flex;align-items:center;background:var(--pri);color:#fff;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:5px 14px;margin:0 auto 14px">Phase 2 · 本次汇报</div>
+        <div style="font-size:22px;font-weight:900;color:var(--tx);margin-bottom:10px">探索倾听风格</div>
+        <div style="font-size:14px;color:var(--dim);line-height:1.8">
+          主题：Empathic Listening<br>
+          形式：互动测试网站<br>
+          成果：六种倾听动物类型
+        </div>
+      </div>
+    </div>
+
+    <p data-s style="--d:450;margin-top:44px;font-size:14.5px;color:var(--mu);font-style:italic;text-align:center">
+      "知道什么是同理心，但你的倾听方式真的具有同理心吗？"
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 3 · MOTIVATION
+═══════════════════════════════════════════ -->
+<section class="slide s-center" id="s3">
+  <div style="width:100%;max-width:920px">
+
+    <div data-s style="--d:0">
+      <div class="ey">选题动机</div>
+      <h2 class="t-xl">当<span class="green">趣味测试</span>成为一种文化</h2>
+      <div class="divider"></div>
+    </div>
+
+    <!-- Trending test tags -->
+    <div class="trend-row" data-s style="--d:180">
+      <div class="trend-tag"><span class="fire">🔥</span> SBTI</div>
+      <div class="trend-tag"><span class="fire">🔥</span> MBTI</div>
+      <div class="trend-tag"><span class="fire">🔥</span> DISC 性格测试</div>
+      <div class="trend-tag"><span class="fire">🔥</span> 九型人格</div>
+    </div>
+    <p data-s style="--d:280;font-size:13.5px;color:var(--mu);margin:12px 0 24px;font-style:italic">
+      这些测试为什么会爆火？因为人们渴望「了解自己」，而测试让这件事变得轻松有趣。
+    </p>
+
+    <!-- Insights -->
+    <div class="ins-grid" data-s style="--d:360">
+      <div class="ins-card" style="border-color:var(--pri);box-shadow:0 4px 0 var(--pri-d)">
+        <span class="ins-ic">🪞</span>
+        <div class="ins-h">自我探索的渴望</div>
+        <div class="ins-p">年轻人愿意花时间做测试，因为结果能帮他们更清晰地认识自己。</div>
+      </div>
+      <div class="ins-card" style="border-color:var(--pri);box-shadow:0 4px 0 var(--pri-d)">
+        <span class="ins-ic">🎮</span>
+        <div class="ins-h">游戏化降低门槛</div>
+        <div class="ins-p">比起读论文，情境选择题更直觉、更好玩，完成率和分享率都更高。</div>
+      </div>
+      <div class="ins-card" style="border-color:var(--pri);box-shadow:0 4px 0 var(--pri-d)">
+        <span class="ins-ic">💡</span>
+        <div class="ins-h">我们的洞察</div>
+        <div class="ins-p">把<strong>六级倾听理论</strong>用同样的方式呈现——让同学在玩测试的过程中，自然地理解 EI。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 4 · THEORY
+═══════════════════════════════════════════ -->
+<section class="slide s-center" id="s4">
+  <div style="width:100%;max-width:900px;display:flex;gap:52px;align-items:flex-start">
+
+    <!-- Left: theory intro -->
+    <div style="flex:0 0 250px">
+      <div class="ey" data-s style="--d:0">理论基础</div>
+      <h2 class="t-xl" data-s style="--d:100">六级<br><span class="green">倾听理论</span></h2>
+      <div class="divider" data-s style="--d:180"></div>
+      <p class="t-body" data-s style="--d:260">
+        同理心倾听分为六个层级，从「忽视」到「完全的同理心倾听」。
+      </p>
+      <p class="t-body" data-s style="--d:330;margin-top:12px">
+        大多数人停留在<strong>第 2–4 级</strong>，真正的同理心倾听需要放下评判、建议与自我视角。
+      </p>
+      <p data-s style="--d:400;font-size:11.5px;color:var(--mu);margin-top:18px;font-style:italic">Zenger &amp; Folkman, 2016</p>
+    </div>
+
+    <!-- Right: level list -->
+    <div class="lvs" data-s style="--d:160">
+      <div class="lv">
+        <div class="lv-n">1</div>
+        <div><div class="lv-name">忽视 Ignoring</div><div class="lv-desc">完全不专注，心不在焉</div></div>
+      </div>
+      <div class="lv">
+        <div class="lv-n">2</div>
+        <div><div class="lv-name">假装在听 Pretending</div><div class="lv-desc">表面回应，实则没有真正投入</div></div>
+      </div>
+      <div class="lv">
+        <div class="lv-n">3</div>
+        <div><div class="lv-name">选择性倾听 Selective</div><div class="lv-desc">只听自己感兴趣的内容</div></div>
+      </div>
+      <div class="lv hi">
+        <div class="lv-n">4</div>
+        <div><div class="lv-name">专注倾听 Attentive</div><div class="lv-desc">全神贯注，但仍以自我为中心</div></div>
+      </div>
+      <div class="lv hi">
+        <div class="lv-n">5</div>
+        <div><div class="lv-name">感受情感 Empathic</div><div class="lv-desc">感知并反映对方情绪，有共鸣</div></div>
+      </div>
+      <div class="lv hi">
+        <div class="lv-n">6</div>
+        <div><div class="lv-name">完全同理心倾听 Full Empathic</div><div class="lv-desc">完全进入对方的情感世界</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 5 · APPROACH
+═══════════════════════════════════════════ -->
+<section class="slide s-center" id="s5">
+  <div style="width:100%;max-width:920px">
+
+    <div data-s style="--d:0">
+      <div class="ey">我们的方案</div>
+      <h2 class="t-xl">为什么是<span class="green">互动测试网站</span>？</h2>
+      <div class="divider"></div>
+    </div>
+
+    <div class="agrid" data-s style="--d:220">
+      <div class="acard">
+        <span class="acard-ic">🎯</span>
+        <div class="acard-h">自我探索 &gt; 被告知</div>
+        <div class="acard-p">通过情境测试主动发现自己的倾听模式，而非被动接受理论讲解，认知更深刻。</div>
+      </div>
+      <div class="acard">
+        <span class="acard-ic">🎮</span>
+        <div class="acard-h">游戏化参与</div>
+        <div class="acard-p">动物角色 + 即时结果反馈，让严肃的心理测评变得轻松有趣，降低参与门槛。</div>
+      </div>
+      <div class="acard">
+        <span class="acard-ic">📖</span>
+        <div class="acard-h">理论落地</div>
+        <div class="acard-p">六级倾听 → 六种动物，把抽象的学术框架转化为具体可感知的角色类型。</div>
+      </div>
+      <div class="acard">
+        <span class="acard-ic">🌐</span>
+        <div class="acard-h">即用即传播</div>
+        <div class="acard-p">纯静态单文件，部署于 GitHub Pages，任何人扫码即可免费体验，无需安装。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 6 · ANIMALS
+═══════════════════════════════════════════ -->
+<section class="slide s-center" id="s6">
+  <div style="width:100%;max-width:980px">
+
+    <div data-s style="--d:0;display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px">
+      <div>
+        <div class="ey">产品核心</div>
+        <h2 class="t-xl">六种<span class="green">倾听动物</span>原型</h2>
+      </div>
+      <p style="font-size:12px;color:var(--mu);font-style:italic;white-space:nowrap;margin-left:16px">点击卡片查看详情 →</p>
+    </div>
+    <div class="divider" data-s style="--d:80"></div>
+
+    <div class="angrid" data-s style="--d:200">
+      <div class="ancard" style="background:var(--whale-l);border-color:var(--whale);box-shadow:0 5px 0 var(--whale-d)"
+           onclick="showAnimal('🐋','深海聆听鲸','海绵型 · Lv.4','默默吸收对方情绪，让人感到被接纳，是朋友眼中最安全的存在。','太擅长承接别人，有时忘了表达自己的感受。','试着在倾听后也说出自己的感受，同理心是双向的。','whale')">
+        <div class="an-badge">Lv.4</div>
+        <span class="an-em">🐋</span>
+        <div class="an-name">深海聆听鲸</div>
+        <div class="an-type" style="color:var(--whale-d)">海绵型</div>
+        <div class="an-lv">沉静吸收，默默陪伴</div>
+      </div>
+      <div class="ancard" style="background:var(--owl-l);border-color:var(--owl);box-shadow:0 5px 0 var(--owl-d)"
+           onclick="showAnimal('🦉','月夜共情枭','镜子型 · Lv.5-6','能精准反映对方的话，让 TA 感到被真正理解，是同理心能力最强的类型。','有时过于冷静，对方可能希望你也能多一点情感卷入。','在理解对方的同时，让自己的情感也流动起来。','owl')">
+        <div class="an-badge">Lv.5-6</div>
+        <span class="an-em">🦉</span>
+        <div class="an-name">月夜共情枭</div>
+        <div class="an-type" style="color:var(--owl-d)">镜子型</div>
+        <div class="an-lv">洞察深层，精准共鸣</div>
+      </div>
+      <div class="ancard" style="background:var(--dolphin-l);border-color:var(--dolphin);box-shadow:0 5px 0 var(--dolphin-d)"
+           onclick="showAnimal('🐬','彩虹活力豚','蹦床型 · Lv.3','反应灵敏，善于互动，话题在你手里永远不会冷场。','有时对话不知不觉转移到了你自己身上，对方的感受还没说完就被带走了。','在回应之前先停顿 3 秒，确认对方真的说完了。','dolphin')">
+        <div class="an-badge">Lv.3</div>
+        <span class="an-em">🐬</span>
+        <div class="an-name">彩虹活力豚</div>
+        <div class="an-type" style="color:var(--dolphin-d)">蹦床型</div>
+        <div class="an-lv">活跃回应，充满活力</div>
+      </div>
+      <div class="ancard" style="background:var(--tiger-l);border-color:var(--tiger);box-shadow:0 5px 0 var(--tiger-d)"
+           onclick="showAnimal('🐯','闪电行动虎','解决者型 · Lv.2-3','行动力强，朋友遇到问题第一个想到的就是你，因为你总能给出实际帮助。','太急于解决问题，有时对方只是想被听见，还没准备好接受建议。','在给建议前，先问「你需要我帮你分析，还是只是想说说？」','tiger')">
+        <div class="an-badge">Lv.2-3</div>
+        <span class="an-em">🐯</span>
+        <div class="an-name">闪电行动虎</div>
+        <div class="an-type" style="color:var(--tiger-d)">解决者型</div>
+        <div class="an-lv">务实高效，急于行动</div>
+      </div>
+      <div class="ancard" style="background:var(--bear-l);border-color:var(--bear);box-shadow:0 5px 0 var(--bear-d)"
+           onclick="showAnimal('🐻','暖阳陪伴熊','暖心型 · Lv.4-5','用温暖与包容给对方安全感，是情绪低落时最想找到的那个人。','有时太想保护对方，不愿让他们面对困难，可能阻碍了对方自己成长。','相信对方有能力面对困难，陪伴 ≠ 替代对方承担。','bear')">
+        <div class="an-badge">Lv.4-5</div>
+        <span class="an-em">🐻</span>
+        <div class="an-name">暖阳陪伴熊</div>
+        <div class="an-type" style="color:var(--bear-d)">暖心型</div>
+        <div class="an-lv">温柔包容，给予安全感</div>
+      </div>
+      <div class="ancard" style="background:var(--butterfly-l);border-color:var(--butterfly);box-shadow:0 5px 0 var(--butterfly-d)"
+           onclick="showAnimal('🦋','蜕变探索蝶','探索型 · Lv.5','用好奇心和开放式提问引导对方自我发现，让对方在倾诉中找到答案。','有时问太多问题，对方可能感到像在被审问，而不是被倾听。','用沉默给对方更多空间，有时不问也是一种陪伴。','butterfly')">
+        <div class="an-badge">Lv.5</div>
+        <span class="an-em">🦋</span>
+        <div class="an-name">蜕变探索蝶</div>
+        <div class="an-type" style="color:var(--butterfly-d)">探索型</div>
+        <div class="an-lv">好奇引导，开放提问</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Animal Modal -->
+  <div id="modal-wrap" onclick="closeModal()">
+    <div id="modal-inner" onclick="event.stopPropagation()">
+      <div id="modal-head">
+        <div id="m-em" style="font-size:60px;margin-bottom:10px"></div>
+        <div id="m-name" style="font-size:21px;font-weight:900;color:var(--tx);margin-bottom:4px"></div>
+        <div id="m-level" style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu)"></div>
+      </div>
+      <div id="modal-body">
+        <div class="msec">
+          <div class="msec-label">✨ 特点</div>
+          <div class="msec-text" id="m-trait"></div>
+        </div>
+        <div class="msec">
+          <div class="msec-label">⚠️ 盲点</div>
+          <div class="msec-text" id="m-blind"></div>
+        </div>
+        <div class="msec">
+          <div class="msec-label">🌱 成长建议</div>
+          <div class="msec-text" id="m-grow"></div>
+        </div>
+        <button class="btn btn-p" onclick="closeModal()" style="margin-top:20px;width:100%">关闭</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 7 · DEMO
+═══════════════════════════════════════════ -->
+<section class="slide s-center" id="s7">
+  <div style="width:100%;max-width:980px">
+
+    <div data-s style="--d:0">
+      <div class="ey">产品演示</div>
+      <h2 class="t-xl">网站<span class="green">功能亮点</span></h2>
+      <div class="divider"></div>
+    </div>
+
+    <div class="demo-wrap" data-s style="--d:200">
+      <div class="feat-col">
+        <div class="feat">
+          <span class="feat-ic">🏠</span>
+          <div>
+            <div class="feat-h">首页 · 悬念开场</div>
+            <div class="feat-p">「你真的在听吗？」Splash 入场 + 6 只动物 3D 翻转卡预览，吸引用户开始答题</div>
+          </div>
+        </div>
+        <div class="feat">
+          <span class="feat-ic">🎯</span>
+          <div>
+            <div class="feat-h">答题 · 8 道真实情境题</div>
+            <div class="feat-p">选项即时高亮，动态进度指示，背景色随题目动态变化，保持沉浸感</div>
+          </div>
+        </div>
+        <div class="feat">
+          <span class="feat-ic">🌟</span>
+          <div>
+            <div class="feat-h">结果 · 专属动物报告</div>
+            <div class="feat-p">全屏动物色，优势 / 盲点 / 成长建议，彩带庆祝动画 + Canvas 生成分享图</div>
+          </div>
+        </div>
+        <div class="feat">
+          <span class="feat-ic">📚</span>
+          <div>
+            <div class="feat-h">学习页 · 科学支撑</div>
+            <div class="feat-p">六级倾听理论详解，3 大倾听误区，常见误解翻转卡，数据计数动画</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="qr-col">
+        <div class="qr-box">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=https://jiangxinchen2007.github.io/ei-listening-quiz/index_v2.html" alt="QR Code">
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:14px;font-weight:800;color:var(--tx);margin-bottom:4px">扫码体验</div>
+          <div style="font-size:11.5px;color:var(--mu);line-height:1.65">GitHub Pages<br>无需安装</div>
+        </div>
+        <a href="https://jiangxinchen2007.github.io/ei-listening-quiz/index_v2.html" target="_blank" class="btn btn-p" style="font-size:13px;padding:10px 16px;width:100%;justify-content:center">🔗 打开网站</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 8 · ITERATION
+═══════════════════════════════════════════ -->
+<section class="slide s-center" id="s8">
+  <div style="width:100%;max-width:860px;display:flex;gap:48px;align-items:flex-start">
+
+    <!-- Left side -->
+    <div style="flex:0 0 220px">
+      <div class="ey" data-s style="--d:0">制作历程</div>
+      <h2 class="t-xl" data-s style="--d:100"><span class="green">7 轮</span><br>迭代打磨</h2>
+      <div class="divider" data-s style="--d:180"></div>
+      <p class="t-body" data-s style="--d:260">
+        从最初 4 种类型到 6 种，从基础问卷到游戏化体验，每次迭代都来自对「用户感受」的重新思考。
+      </p>
+      <p data-s style="--d:340;font-size:12.5px;color:var(--mu);margin-top:14px;font-style:italic;line-height:1.7">
+        没有一次就完美的设计，只有不断逼近真实感受的迭代。
+      </p>
+    </div>
+
+    <!-- Right: timeline -->
+    <div class="timeline" data-s style="--d:180">
+      <div class="trow"><div class="tdots"><div class="tdot">1</div><div class="tline"></div></div><div class="tc"><div class="tv">V1</div><div class="th">基础答题框架</div><div class="td">4 种类型，基础 UI，验证核心测评逻辑</div></div></div>
+      <div class="trow"><div class="tdots"><div class="tdot">2</div><div class="tline"></div></div><div class="tc"><div class="tv">V2</div><div class="th">引入动物角色</div><div class="td">为每种类型设计专属动物形象与配色体系</div></div></div>
+      <div class="trow"><div class="tdots"><div class="tdot">3</div><div class="tline"></div></div><div class="tc"><div class="tv">V3</div><div class="th">扩展至 6 种类型</div><div class="td">新增暖心熊、探索蝶，覆盖更多真实风格</div></div></div>
+      <div class="trow"><div class="tdots"><div class="tdot">4</div><div class="tline"></div></div><div class="tc"><div class="tv">V4</div><div class="th">Duolingo UI 重设计</div><div class="td">游戏化按钮、3D 翻转卡、暖奶油色系统</div></div></div>
+      <div class="trow"><div class="tdots"><div class="tdot">5</div><div class="tline"></div></div><div class="tc"><div class="tv">V5</div><div class="th">学习页 learn.html</div><div class="td">六级倾听理论科普，毛玻璃导航，动画卡片</div></div></div>
+      <div class="trow"><div class="tdots"><div class="tdot">6</div><div class="tline"></div></div><div class="tc"><div class="tv">V6</div><div class="th">Canvas 分享图生成</div><div class="td">一键生成 1080×1350 分享长图</div></div></div>
+      <div class="trow"><div class="tdots"><div class="tdot">7</div></div><div class="tc cur"><div class="tv">V7 · 当前版本</div><div class="th">动效 &amp; 性能优化</div><div class="td">Splash 入场、彩带庆祝、全站流畅化</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 9 · REFLECTION
+═══════════════════════════════════════════ -->
+<section class="slide s-center" id="s9">
+  <div style="width:100%;max-width:920px">
+
+    <div data-s style="--d:0">
+      <div class="ey">成果与收获</div>
+      <h2 class="t-xl">这次项目<span class="green">让我们学到了</span>什么</h2>
+      <div class="divider"></div>
+    </div>
+
+    <div class="rgrid" data-s style="--d:220">
+      <div class="rcard" style="border-left-color:var(--pri)">
+        <span class="rcard-ic">🔗</span>
+        <div class="rcard-h">理论与实践的连接</div>
+        <div class="rcard-t">把六级倾听理论「翻译」成 6 只动物，让抽象变具体，让学术走近大学生的生活。</div>
+      </div>
+      <div class="rcard" style="border-left-color:var(--owl)">
+        <span class="rcard-ic">👂</span>
+        <div class="rcard-h">倾听的自我觉察</div>
+        <div class="rcard-t">设计题目时，我们才意识到自己也常常是「解决者型」——先给建议，再去感受。</div>
+      </div>
+      <div class="rcard" style="border-left-color:var(--dolphin)">
+        <span class="rcard-ic">🔄</span>
+        <div class="rcard-h">迭代思维的价值</div>
+        <div class="rcard-t">没有一次就完美，每一轮修改都是在更好地理解「用户需要什么样的感受」。</div>
+      </div>
+      <div class="rcard" style="border-left-color:var(--butterfly)">
+        <span class="rcard-ic">💡</span>
+        <div class="rcard-h">情绪智能的真正意义</div>
+        <div class="rcard-t">EI 不只是管理自己的情绪，更是「让对方感到被真正听见」的能力。</div>
+      </div>
+    </div>
+
+    <div data-s style="--d:420;margin-top:18px;background:var(--pri-l);border:2px solid rgba(24,164,73,.25);border-radius:16px;padding:14px 24px;text-align:center">
+      <p style="font-size:15.5px;font-weight:700;color:var(--pri);font-style:italic">"倾听，不只是等轮到自己说话。"</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SLIDE 10 · THANK YOU
+═══════════════════════════════════════════ -->
+<section class="slide" id="s10" style="justify-content:flex-start">
+  <div style="position:relative;z-index:1;width:100%;max-width:900px;display:flex;flex-direction:column;align-items:center;height:100%">
+
+    <!-- Top subtitle -->
+    <div data-s style="--d:0;text-align:center">
+      <p style="font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mu)">Emotional Intelligence · Group Presentation</p>
+    </div>
+
+    <!-- Hero text (fills remaining vertical space, centered) -->
+    <div data-s style="--d:100;text-align:center;flex:1;display:flex;align-items:center">
+      <h1 style="font-size:clamp(72px,10vw,120px);font-weight:900;letter-spacing:-.055em;line-height:.9;color:var(--tx)">感谢聆听！</h1>
+    </div>
+
+    <!-- Divider -->
+    <div data-s style="--d:220;width:100%;height:1.5px;background:rgba(0,0,0,.08);margin-bottom:28px"></div>
+
+    <!-- Bottom: members left + QR right -->
+    <div data-s style="--d:320;display:flex;gap:40px;align-items:center;width:100%;padding-bottom:4px">
+
+      <!-- Members -->
+      <div style="flex:1">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mu);margin-bottom:14px">七匹狼小组</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:9px">
+          <div class="chip-m"><div class="chip-m-name">姜昕辰</div><div class="chip-m-id">2530031119</div></div>
+          <div class="chip-m"><div class="chip-m-name">黎宇刚</div><div class="chip-m-id">2530031157</div></div>
+          <div class="chip-m"><div class="chip-m-name">廖子贤</div><div class="chip-m-id">2530031167</div></div>
+          <div class="chip-m"><div class="chip-m-name">梁家倩</div><div class="chip-m-id">2530031163</div></div>
+          <div class="chip-m"><div class="chip-m-name">林烜正</div><div class="chip-m-id">2530031173</div></div>
+          <div class="chip-m"><div class="chip-m-name">吴天钰</div><div class="chip-m-id">2530031322</div></div>
+          <div class="chip-m"><div class="chip-m-name">俞锦诚</div><div class="chip-m-id">2530031368</div></div>
+        </div>
+      </div>
+
+      <!-- Vertical divider -->
+      <div style="width:1.5px;height:130px;background:rgba(0,0,0,.08);flex-shrink:0"></div>
+
+      <!-- QR -->
+      <div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:10px">
+        <div style="width:128px;height:128px;background:var(--card);border:2.5px solid var(--bd);border-radius:18px;overflow:hidden;box-shadow:0 5px 0 rgba(0,0,0,.08);display:flex;align-items:center;justify-content:center">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=https://jiangxinchen2007.github.io/ei-listening-quiz/index_v2.html" style="width:112px;height:112px;border-radius:4px" alt="QR">
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:13px;font-weight:800;color:var(--tx)">扫码体验</div>
+          <div style="font-size:11px;color:var(--mu);margin-top:2px">GitHub Pages</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- decorative blobs -->
+  <div style="position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden">
+    <div style="position:absolute;top:-80px;right:-80px;width:380px;height:380px;border-radius:50%;background:var(--pri-l);filter:blur(90px);opacity:.55;animation:glow 4s ease-in-out infinite"></div>
+    <div style="position:absolute;bottom:-60px;left:-60px;width:280px;height:280px;border-radius:50%;background:var(--whale-l);filter:blur(70px);opacity:.5;animation:glow 4s 1.2s ease-in-out infinite"></div>
+  </div>
+</section>
+
+<canvas id="confetti-canvas"></canvas>
+<!-- ── CHROME ELEMENTS ── -->
+<div id="counter">1 / 10</div>
+<div id="spk-badge">🎤 讲者</div>
+<div id="pdots"></div>
+<button class="nav" id="np" onclick="go(-1)">←</button>
+<button class="nav" id="nn" onclick="go(1)">→</button>
+<button id="notes-btn" onclick="toggleNotes()">📝 讲稿</button>
+<div id="notes-panel">
+  <div id="n-label">演讲参考 · 按 N 键切换显示</div>
+  <div id="n-speaker"></div>
+  <div id="n-text"></div>
+  <div id="n-time"></div>
+</div>
+
+<script>
+const DATA = [
+  {id:'s1', speaker:'姜昕辰', time:'约 1 分钟', darkSlide:false,
+   notes:`大家好，我们是七匹狼小组。今天来汇报第二阶段的成果——一个名为「你是哪种倾听动物？」的互动测试网站。
+
+在开始之前，请大家先看看这六只动物——它们背后，是六种完全不同的倾听方式。你会是哪一种呢？`},
+  {id:'s2', speaker:'姜昕辰', time:'约 1 分钟', darkSlide:false,
+   notes:`在第一阶段，我们深入探讨了同理心的理论与层次。
+
+但我们发现：「知道」同理心和「做到」同理心之间，有一道很大的鸿沟。
+
+于是我们问：有没有一种方式，能让人主动发现自己的倾听风格，而不只是听讲？这就是第二阶段的出发点。`},
+  {id:'s3', speaker:'黎宇刚', time:'约 1 分钟', darkSlide:false,
+   notes:`相信在座的各位同学都有做过 MBTI 人格测试，就在前不久，又兴起了一阵 SBTI 测试浪潮，刷屏朋友圈，这类趣味测试为什么这么火？
+
+因为它满足了一种普遍的渴望——通过「玩」来认识自己。比起被告知，主动探索的认知更深刻，也更有共鸣。
+
+我们从中得到启发：如果可以用同样的方式来呈现六级倾听理论，让同学在做题过程中自然地理解自己的倾听风格——这不就是最好的 EI 教育吗？`},
+  {id:'s4', speaker:'廖子贤', time:'约 2 分钟', darkSlide:false,
+   notes:`我们的研究基于 Zenger & Folkman（2016）提出的六级倾听理论。
+
+这个理论告诉我们，倾听不是非0即1的，而是分六个层级。大多数人停留在第 2–4 级——我们假装在听，或只听自己感兴趣的内容。
+
+真正的同理心倾听——第 5、6 级——需要我们完全放下自我，进入对方的情感世界。这很难，但可以练习。`},
+  {id:'s5', speaker:'梁家倩', time:'约 1.5 分钟', darkSlide:false,
+   notes:`基于这个理论，我们设计了一个互动测试网站。
+
+为什么选择「测试」这种形式？因为人们通过「自我发现」获得的认知，远比被告知的更深刻。
+
+我们借鉴了 Duolingo 的游戏化设计理念，把严肃的心理测评做得轻松好玩——但每道题背后，都有扎实的理论支撑。`},
+  {id:'s6', speaker:'林烜正', time:'约 2 分钟', darkSlide:false,
+   notes:`我们设计了六种倾听动物原型，每种对应六级倾听理论中不同层级。【点击卡片演示】
+
+🐋 鲸（海绵型）：默默吸收，第4级
+🦉 枭（镜子型）：精准反映情绪，第5-6级 ← 最高层级
+🐬 豚（蹦床型）：活跃互动但易跑题，第3级
+🐯 虎（解决者型）：立刻给方案，第2-3级
+🐻 熊（暖心型）：温暖包容，第4-5级
+🦋 蝶（探索型）：好奇引导，第5级`},
+  {id:'s7', speaker:'姜昕辰', time:'约 2.5 分钟（含现场演示）', darkSlide:false,
+   notes:`现在让我们来实际看看这个网站。【扫二维码或点「打开网站」现场演示】
+
+网站共四个部分：
+1. 首页：用「你真的在听吗？」引入话题
+2. 答题：8道真实校园情境题，约3分钟完成
+3. 结果：全屏专属动物展示，成长建议，可生成分享图
+4. 学习页：系统讲解六级倾听理论
+
+整个网站是纯静态的，无需安装，部署在 GitHub Pages 上。`},
+  {id:'s8', speaker:'吴天钰', time:'约 1.5 分钟', darkSlide:false,
+   notes:`这个网站经历了7轮迭代。
+
+最大的转变是第3到第4轮——我们意识到一个测试不应该只告诉你「你是XX类型」，还要给你一面镜子，让你看到自己的成长空间。
+
+还有一个关键决策：把原来4种类型扩充到6种，是因为我们发现有很多同学的倾听方式既不是「解决者」也不是「镜子」，他们的方式同样值得被看见和命名。
+
+每一次改版，都是在问：「如果我是用户，我会有什么感受？」`},
+  {id:'s9', speaker:'俞锦诚', time:'约 1.5 分钟', darkSlide:false,
+   notes:`通过这个项目，我们有几点深刻的收获。
+
+首先，在设计题目时，我们自己也照了一面镜子，发现自己很多时候其实是「解决者型」——急于给建议，而忘记先去感受对方。
+
+其次，这次实践让我们体会到：EI 不只是管理自己的情绪，更是「让对方感到被真正听见」的能力。
+
+我们把这句话放在结尾：倾听，不只是等轮到自己说话。`},
+  {id:'s10', speaker:'全体成员', time:'约 0.5 分钟 + Q&A', darkSlide:false,
+   notes:`谢谢大家的聆听！
+
+我们的网站已经上线，欢迎大家扫码体验，测测自己是哪种倾听动物。
+
+如果你愿意，可以把结果分享给朋友，看看 TA 眼中的你和你自己认为的是否一致——这本身也是一种同理心倾听的练习。
+
+我们开放提问，欢迎大家提问！`}
+];
+
+let cur = 0, notesOpen = false;
+
+function init() {
+  const pd = document.getElementById('pdots');
+  DATA.forEach((_,i) => {
+    const d = document.createElement('div');
+    d.className = 'pd' + (i===0 ? ' on' : '');
+    d.onclick = () => goTo(i);
+    pd.appendChild(d);
+  });
+  document.getElementById(DATA[0].id).classList.add('active');
+  updateUI();
+}
+
+function go(dir) {
+  const next = Math.max(0, Math.min(DATA.length-1, cur+dir));
+  if (next === cur) return;
+  goTo(next, dir);
+}
+
+function goTo(idx, dir) {
+  if (idx === cur) return;
+  const d = (dir !== undefined) ? dir : (idx > cur ? 1 : -1);
+  const fromEl = document.getElementById(DATA[cur].id);
+  const toEl   = document.getElementById(DATA[idx].id);
+
+  fromEl.classList.remove('active');
+  if (d > 0) fromEl.classList.add('go-left');
+  setTimeout(() => fromEl.classList.remove('go-left'), 500);
+
+  toEl.style.transform = `translateX(${d > 0 ? 60 : -60}px)`;
+  toEl.style.transition = 'none';
+  toEl.classList.add('active');
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    toEl.style.transition = '';
+    toEl.style.transform  = '';
+  }));
+
+  cur = idx;
+  updateUI();
+}
+
+function updateUI() {
+  document.getElementById('counter').textContent = `${cur+1} / ${DATA.length}`;
+  document.querySelectorAll('.pd').forEach((d,i) => d.classList.toggle('on', i===cur));
+  document.getElementById('np').classList.toggle('dim', cur===0);
+  document.getElementById('nn').classList.toggle('dim', cur===DATA.length-1);
+
+  const n = DATA[cur];
+
+  // Speaker badge — hidden on cover and thank-you slide
+  const badge = document.getElementById('spk-badge');
+  badge.style.display = (cur === 0 || cur === DATA.length-1) ? 'none' : '';
+  badge.textContent = '🎤 ' + n.speaker;
+  badge.classList.toggle('on-dark', !!n.darkSlide);
+
+  // Nav arrows: flip to white on dark slides
+  ['np','nn'].forEach(id => {
+    document.getElementById(id).style.cssText = n.darkSlide
+      ? 'background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.2);color:#fff'
+      : '';
+  });
+
+  // Counter color on dark slides
+  document.getElementById('counter').style.color = n.darkSlide
+    ? 'rgba(255,255,255,.3)' : 'rgba(0,0,0,.22)';
+
+  // Notes panel
+  document.getElementById('n-speaker').textContent = '🎤 ' + n.speaker;
+  document.getElementById('n-text').textContent    = n.notes;
+  document.getElementById('n-time').textContent    = '⏱ ' + n.time;
+}
+
+function toggleNotes() {
+  notesOpen = !notesOpen;
+  document.getElementById('notes-panel').classList.toggle('open', notesOpen);
+  document.getElementById('notes-btn').textContent = notesOpen ? '✕ 关闭' : '📝 讲稿';
+}
+
+function showAnimal(em, name, level, trait, blind, grow, colorKey) {
+  document.getElementById('m-em').textContent    = em;
+  document.getElementById('m-name').textContent  = name;
+  document.getElementById('m-level').textContent = level;
+  document.getElementById('m-trait').textContent = trait;
+  document.getElementById('m-blind').textContent = blind;
+  document.getElementById('m-grow').textContent  = grow;
+
+  // Apply animal color to modal header background
+  const head = document.getElementById('modal-head');
+  head.style.background   = `var(--${colorKey}-l)`;
+  head.style.borderBottom = `2.5px solid var(--${colorKey})`;
+
+  document.getElementById('modal-wrap').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal-wrap').classList.remove('open');
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key==='ArrowRight' || e.key===' ') { e.preventDefault(); go(1); }
+  if (e.key==='ArrowLeft')                 { e.preventDefault(); go(-1); }
+  if (e.key==='n' || e.key==='N')          toggleNotes();
+  if (e.key==='f' || e.key==='F')          document.documentElement.requestFullscreen?.();
+  if (e.key==='Escape')                    { if(notesOpen) toggleNotes(); closeModal(); }
+});
+
+// Touch swipe
+let tx = 0;
+document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; });
+document.addEventListener('touchend',   e => {
+  const dx = e.changedTouches[0].clientX - tx;
+  if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+});
+
+init();
+
+/* ── CONFETTI ── */
+(function(){
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  const COLORS = ['#18A449','#60A5FA','#C084FC','#2DD4BF','#FB923C','#F472B6','#FBBF24','#fff'];
+  let particles = [], rafId = null;
+
+  function resize(){ canvas.width = innerWidth; canvas.height = innerHeight; }
+  window.addEventListener('resize', resize); resize();
+
+  function Particle(){
+    this.x = Math.random() * canvas.width;
+    this.y = -16;
+    this.w = 8 + Math.random() * 8;
+    this.h = 5 + Math.random() * 5;
+    this.color = COLORS[Math.floor(Math.random()*COLORS.length)];
+    this.vx = (Math.random()-0.5)*4;
+    this.vy = 3 + Math.random()*4;
+    this.rot = Math.random()*Math.PI*2;
+    this.vrot = (Math.random()-0.5)*0.18;
+    this.gravity = 0.12;
+    this.drag = 0.98;
+    this.alpha = 1;
+  }
+  Particle.prototype.update = function(){
+    this.vy += this.gravity;
+    this.vx *= this.drag;
+    this.x += this.vx; this.y += this.vy;
+    this.rot += this.vrot;
+    if(this.y > canvas.height * 0.7) this.alpha -= 0.025;
+  };
+  Particle.prototype.draw = function(){
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, this.alpha);
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rot);
+    ctx.fillStyle = this.color;
+    ctx.fillRect(-this.w/2, -this.h/2, this.w, this.h);
+    ctx.restore();
+  };
+
+  function loop(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles = particles.filter(p => p.alpha > 0);
+    particles.forEach(p=>{ p.update(); p.draw(); });
+    if(particles.length > 0) rafId = requestAnimationFrame(loop);
+    else ctx.clearRect(0,0,canvas.width,canvas.height);
+  }
+
+  window.fireConfetti = function(){
+    if(rafId) cancelAnimationFrame(rafId);
+    particles = [];
+    // Add particles in batches so loop stays alive while staggering
+    let added = 0;
+    const burst = setInterval(()=>{
+      for(let i=0;i<20;i++) particles.push(new Particle());
+      added += 20;
+      if(added >= 240) clearInterval(burst);
+    }, 40);
+    loop();
+  };
+})();
+</script>
+</body>
+</html>
