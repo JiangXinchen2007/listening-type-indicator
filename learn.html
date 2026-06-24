@@ -213,6 +213,7 @@ section:last-of-type{border-bottom:none}
 .lang-btn{position:fixed;bottom:80px;left:24px;height:40px;padding:0 16px;border-radius:20px;background:rgba(253,248,240,.92);backdrop-filter:blur(12px);border:2px solid var(--bd);font-size:13px;font-weight:800;color:var(--dim);cursor:pointer;z-index:91;box-shadow:0 3px 0 rgba(0,0,0,.08);transition:all .2s;letter-spacing:.04em}
 .lang-btn:hover{transform:translateY(-2px);box-shadow:0 5px 0 rgba(0,0,0,.08);border-color:var(--bdh);color:var(--tx)}
 .lang-btn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.08)}
+.stat-src{text-align:center;font-size:11px;color:var(--mu);margin-top:16px;letter-spacing:.02em;opacity:.8;padding:0 16px}
 </style>
 </head>
 <body>
@@ -251,22 +252,23 @@ section:last-of-type{border-bottom:none}
     <p class="learn-hero-sub" data-i18n="lrn-sub">我们以为自己会倾听，但真正被倾听的感受，却是很多人一生中最稀缺的体验。这里是关于倾听的一切——科学、方法和治愈。</p>
     <div class="stat-row">
       <div class="stat-card">
-        <div class="stat-num" data-target="70" data-suffix="%">0%</div>
-        <div class="stat-label" data-i18n="stat-1">每天沟通时间<br>都在倾听</div>
+        <div class="stat-num" data-target="45" data-suffix="%">0%</div>
+        <div class="stat-label" data-i18n="stat-1">沟通时间<br>用于倾听</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" data-target="50" data-suffix="%">0%</div>
+        <div class="stat-label" data-i18n="stat-2">听完后立刻<br>就忘掉一半</div>
       </div>
       <div class="stat-card">
         <div class="stat-num" data-target="25" data-suffix="%">0%</div>
-        <div class="stat-label" data-i18n="stat-2">我们真正记住<br>的内容比例</div>
+        <div class="stat-label" data-i18n="stat-3">两个月后<br>仍能记得的</div>
       </div>
       <div class="stat-card">
-        <div class="stat-num" data-target="10" data-suffix="%">0%</div>
-        <div class="stat-label" data-i18n="stat-3">真正擅长倾听<br>的人的比例</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-num" data-target="40" data-suffix="%">0%</div>
-        <div class="stat-label" data-i18n="stat-4">被倾听后压力<br>荷尔蒙降低</div>
+        <div class="stat-num" data-target="5" data-suffix="%">0%</div>
+        <div class="stat-label" data-i18n="stat-4">仅前 5% 是<br>顶尖倾听者</div>
       </div>
     </div>
+    <div class="stat-src" data-i18n="stat-src">数据来源：Adler et al. (2001)、Nichols (1957)、Zenger &amp; Folkman, HBR (2016)</div>
   </div>
 </div>
 
@@ -952,10 +954,11 @@ const TRANS_LEARN={
   'lrn-pill':{zh:'🎓 倾听动物测试 · 倾听学堂',en:'🎓 Listening Type Indicator · Listening Lab'},
   'lrn-h1':{zh:'倾听，是一门<br>被低估的<em>艺术</em>',en:'Listening is an art<br>we\'ve been <em>underestimating</em>'},
   'lrn-sub':{zh:'我们以为自己会倾听，但真正被倾听的感受，却是很多人一生中最稀缺的体验。这里是关于倾听的一切——科学、方法和治愈。',en:'We all think we know how to listen. But the feeling of being truly heard is one of the rarest experiences in most people\'s lives. Here is everything about listening — the science, the methods, and the healing.'},
-  'stat-1':{zh:'每天沟通时间<br>都在倾听',en:'of daily communication<br>is spent listening'},
-  'stat-2':{zh:'我们真正记住<br>的内容比例',en:'of what we hear<br>do we actually retain'},
-  'stat-3':{zh:'真正擅长倾听<br>的人的比例',en:'of people are<br>truly skilled listeners'},
-  'stat-4':{zh:'被倾听后压力<br>荷尔蒙降低',en:'drop in stress hormones<br>after being truly heard'},
+  'stat-1':{zh:'沟通时间<br>用于倾听',en:'of communication time<br>is spent listening'},
+  'stat-2':{zh:'听完后立刻<br>就忘掉一半',en:'is forgotten<br>right after we hear it'},
+  'stat-3':{zh:'两个月后<br>仍能记得的',en:'is still remembered<br>two months later'},
+  'stat-4':{zh:'仅前 5% 是<br>顶尖倾听者',en:'are truly<br>top-tier listeners'},
+  'stat-src':{zh:'数据来源：Adler et al. (2001)、Nichols (1957)、Zenger & Folkman, HBR (2016)',en:'Sources: Adler et al. (2001); Nichols (1957); Zenger & Folkman, HBR (2016)'},
   'about-ey':{zh:'关于本作品 · 设计理念',en:'About This Work · Design Concept'},
   'about-h':{zh:'用设计语言<br>重新发现倾听',en:'Rediscovering listening<br>through design'},
   'about-p':{zh:'本作品是一个基于情绪智能（EI）理论的交互式测评系统。在 AI 技术深度介入人际关系的今天，「倾听」这项最本质的情感能力，正亟待被重新设计与传播。',en:'This work is an interactive assessment system grounded in Emotional Intelligence (EI) theory. As AI reshapes how we relate to one another, the most fundamental emotional skill — listening — urgently needs to be redesigned and shared.'},
