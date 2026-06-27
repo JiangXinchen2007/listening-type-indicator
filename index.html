@@ -140,9 +140,10 @@ html,body{height:100%;font-family:'Inter',-apple-system,'PingFang SC','Hiragino 
 .qback{width:44px;height:44px;border-radius:50%;background:var(--card);border:2.5px solid var(--bd);cursor:pointer;font-size:18px;color:var(--dim);display:flex;align-items:center;justify-content:center;transition:all .18s cubic-bezier(.34,1.56,.64,1);flex-shrink:0;box-shadow:0 3px 0 rgba(0,0,0,.1)}
 .qback:hover{background:#f0f0f0;transform:translateY(-2px);box-shadow:0 5px 0 rgba(0,0,0,.1)}
 .qback:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.1)}
-.qdots{display:flex;gap:6px;align-items:center;min-width:0;overflow:hidden}
-.qdot{height:8px;border-radius:4px;background:var(--bd);transition:all .35s cubic-bezier(.34,1.56,.64,1);width:8px;flex-shrink:1;min-width:4px}
+.qdots{display:flex;gap:6px;align-items:center;flex:1;min-width:0;overflow:hidden}
+.qdot{height:8px;border-radius:4px;background:var(--bd);transition:all .35s cubic-bezier(.34,1.56,.64,1);width:8px;flex-shrink:1;min-width:3px}
 .qdot.done{width:22px;background:var(--pri)}.qdot.cur{width:22px;background:var(--tx)}
+@media(max-width:480px){.qdots{gap:4px}.qdot.done,.qdot.cur{width:16px}.qdot{width:6px}}
 .qcnt{font-size:12px;font-weight:700;color:var(--mu);letter-spacing:.05em;white-space:nowrap}
 .qbig{font-size:clamp(88px,20vw,168px);font-weight:900;line-height:1;letter-spacing:-.07em;color:rgba(0,0,0,.04);margin-bottom:-18px;user-select:none}
 .qcard{background:var(--card);border:2.5px solid var(--bd);border-radius:26px;padding:26px 22px;box-shadow:0 4px 0 rgba(0,0,0,.08)}
