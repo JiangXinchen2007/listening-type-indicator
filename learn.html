@@ -214,6 +214,79 @@ section:last-of-type{border-bottom:none}
 .lang-btn:hover{transform:translateY(-2px);box-shadow:0 5px 0 rgba(0,0,0,.08);border-color:var(--bdh);color:var(--tx)}
 .lang-btn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(0,0,0,.08)}
 .stat-src{text-align:center;font-size:11px;color:var(--mu);margin-top:16px;letter-spacing:.02em;opacity:.8;padding:0 16px}
+
+/* ── MOBILE LAYOUT ── */
+@media(max-width:639px){
+  /* Reduce double-padding in hero */
+  .container{padding:0 14px}
+  .learn-hero{padding:44px 14px 40px}
+  .learn-hero-sub{font-size:14px;margin-bottom:28px}
+
+  /* Stat cards: 2×2 grid instead of vertical stack */
+  .stat-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .stat-card{min-width:0;padding:14px 8px}
+  .stat-num{font-size:32px}
+  .stat-label{font-size:10.5px;margin-top:4px}
+
+  /* Sections: less vertical breathing room */
+  section{padding:44px 0}
+
+  /* Info cards */
+  .icard{padding:18px 16px}
+  .icard-p{font-size:13px}
+
+  /* Quote block */
+  .quote-block{padding:18px 20px 16px}
+  .quote-text{font-size:14.5px}
+
+  /* Empathy cards */
+  .emp-card{padding:18px 14px}
+  .emp-h{font-size:15px}
+  .emp-p{font-size:12.5px}
+  .emp-example{font-size:12px}
+
+  /* OARS: 2×2 grid */
+  .oars{grid-template-columns:1fr 1fr}
+  .oar{padding:14px 12px}
+  .oar-letter{font-size:28px}
+  .oar-word{font-size:12px}
+  .oar-def,.oar-eg{font-size:11.5px}
+
+  /* Steps timeline */
+  .step{padding:14px 14px}
+  .step-p{font-size:13px}
+
+  /* Myth flip cards: 2×3 grid */
+  .myth-grid{grid-template-columns:1fr 1fr}
+  .mflip-front,.mflip-back{min-height:152px;padding:14px}
+  .mflip-inner{min-height:152px}
+  .mf-text{font-size:11.5px;line-height:1.7}
+  .mf-hint{font-size:10px}
+
+  /* Self-care cards: 2×3 grid */
+  .care-grid{grid-template-columns:1fr 1fr}
+  .care-card{padding:14px 12px}
+  .care-icon{font-size:22px;margin-bottom:7px}
+  .care-h{font-size:13px;margin-bottom:5px}
+  .care-p{font-size:12px;line-height:1.65}
+
+  /* Practice accordion */
+  .practice-card{padding:14px}
+  .practice-q{font-size:13px}
+  .practice-a-inner{font-size:13px}
+  .practice-tip{font-size:11.5px}
+
+  /* Book cards */
+  .book-cover{width:44px;height:58px;font-size:22px}
+  .book-title{font-size:13px}
+  .book-desc{font-size:12px}
+
+  /* Misc */
+  .highlight{padding:14px 16px;font-size:13px}
+  .notice{padding:12px 14px}
+  .notice-text{font-size:12.5px}
+  .divider{margin:24px 0}
+}
 </style>
 </head>
 <body>
